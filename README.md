@@ -1,4 +1,4 @@
-# PR-Reviewer
+# PR-Reviewer 🕵🏼
 
 Streamline Your GitHub Pull Requests with AI, co-authored with LLM.
 
