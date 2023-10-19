@@ -2,7 +2,7 @@
 
 ![PR Reviewer](images/PR_review_process.png)
 
-Streamline Your GitHub Pull Requests with AI, co-authored with LLM.
+Streamline Your GitHub Pull Requests with AI, co-authored with LLM(Large language model).
 
 🚀 Excited to announce our new open-source project: PR Review Bot, a GitHub Pull Request review bot powered by LLM.
 
