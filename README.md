@@ -16,3 +16,4 @@ Streamline Your GitHub Pull Requests with AI, co-authored with LLM(Large languag
 - Can be easily customized to fit your project needs
 - Easy to set up and use
 - Cost Analysis of each review
+- type-checking for python: **pyre-check**
