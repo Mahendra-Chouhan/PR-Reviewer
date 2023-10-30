@@ -1,0 +1,18 @@
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Python script
+        run: python src/name_in_comment.py
+      - name: Read PR comment from file
+        run: cat output.txt > pr_comment.txt
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-path: pr_comment.txt
