@@ -28,6 +28,7 @@ jobs:
       - name: Run Pyre
         continue-on-error: true
         run: |
+          pyre init
           pyre --output=sarif check > sarif.json
       - name: Expose SARIF Results
         uses: actions/upload-artifact@v3
