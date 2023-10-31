@@ -1,0 +1,20 @@
+name: Pyre
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pyre:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Pyre Action
+        # update with the desired version of the action (e.g. `facebook/pyre-action@v0.0.1`)
+        uses: facebook/pyre-action@v0.0.1
+        with:
+            repo-directory: './'
+            requirements-path: 'requirements.txt'
