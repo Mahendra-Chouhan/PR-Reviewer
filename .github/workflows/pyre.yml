@@ -1,8 +1,6 @@
 name: Pyre
-
 on:
   pull_request:
-    branches: [main]
 
 jobs:
   pyre:
