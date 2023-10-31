@@ -1,1 +1,1 @@
-print(yoo)
+print("abc")
