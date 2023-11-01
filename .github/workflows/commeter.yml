@@ -12,7 +12,7 @@ jobs:
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
-        run: cat output.txt > pr_comment.txt
+        run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
