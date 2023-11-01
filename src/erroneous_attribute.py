@@ -1,2 +1,3 @@
 my_string = "Hello, world!"
-my_string.reverse()
+print(my_string)
+# my_string.reverse()
