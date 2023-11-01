@@ -1,10 +1,11 @@
 
 import glob
+import torch
 import sys
 from transformers import AutoModel, AutoTokenizer
 
 checkpoint = "Salesforce/codet5p-220m-bimodal"
-device = "cuda"  # for GPU usage or "cpu" for CPU usage
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, trust_remote_code=True)
 model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(device)
