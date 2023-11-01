@@ -1,7 +1,6 @@
 
 import glob
 import sys
-import pandas as pd
 from transformers import AutoModel, AutoTokenizer
 
 checkpoint = "Salesforce/codet5p-220m-bimodal"
