@@ -1,3 +1,4 @@
+name: commenter
 on:
   pull_request:
 
