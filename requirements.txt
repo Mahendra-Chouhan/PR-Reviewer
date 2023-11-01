@@ -13,7 +13,7 @@ multidict==6.0.4
 multiprocess==0.70.15
 networkx==3.1
 numpy==1.24.4
-packaging==23.2
+# packaging==23.2
 pandas==2.0.3
 pathtools==0.1.2
 peft @ git+https://github.com/huggingface/peft.git@884b1ac3a8ef49c9301b5bbf02e8bc64349e95f9
