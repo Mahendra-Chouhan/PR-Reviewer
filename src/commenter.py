@@ -31,7 +31,7 @@ code = """def svg_to_image(string, size=None):
 input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
 
 generated_ids = model.generate(input_ids, max_length=20)
-xyz= print(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
+xyz= tokenizer.decode(generated_ids[0], skip_special_tokens=True)
 # Convert a string of SVG data to an image.
 
 output_handle = open("src/files/output.txt", "w+")
