@@ -9,9 +9,9 @@ tokenizer = AutoTokenizer.from_pretrained(checkpoint, trust_remote_code=True)
 model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(device)
 
 files = glob.glob("*.py")
-
+output_handle= open(file, "r") as f
 for file in files:
-    with open(file, "r") as f:
+    with output_handle:
         code =f.read()
 
 input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
