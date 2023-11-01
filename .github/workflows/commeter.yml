@@ -3,20 +3,15 @@ on:
   pull_request:
 
 jobs:
-  installations:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: installations
-        run: |
-          pip install transformers
-            
   test:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
+      - name: installations
+        run: |
+          pip install transformers
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
