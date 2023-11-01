@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run Python script
-        run: python src/name_in_comment.py
+        run: python src/commenter.py
       - name: Read PR comment from file
         run: cat output.txt > pr_comment.txt
       - name: Add PR comment
