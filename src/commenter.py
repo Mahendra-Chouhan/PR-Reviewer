@@ -21,7 +21,7 @@ xyz= print(tokenizer.decode(generated_ids[0], skip_special_tokens=True))
 # Convert a string of SVG data to an image.
 
 output_handle = open("src/files/output.txt", "w+")
-output_handle.write(xyz)
+output_handle.write(f'{xyz}')
 output_handle.close()
 
 sys.exit(0)
