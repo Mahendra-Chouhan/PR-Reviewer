@@ -1,7 +1,8 @@
 
-from transformers import AutoModel, AutoTokenizer
 import glob
 import sys
+import pandas as pd
+from transformers import AutoModel, AutoTokenizer
 
 checkpoint = "Salesforce/codet5p-220m-bimodal"
 device = "cuda"  # for GPU usage or "cpu" for CPU usage
