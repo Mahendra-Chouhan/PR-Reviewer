@@ -3,20 +3,18 @@ on:
   pull_request:
 
 jobs:
-  installations:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: installations
-        run: pip install -i requirements.txt
-        
-            
   test:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install dependencies
+        run: pip install -r requirements.txt
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
