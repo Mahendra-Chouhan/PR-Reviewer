@@ -21,9 +21,8 @@ files = [file for file in files if file != os.path.basename(__file__)]
 # Read each .py file and print its contents
 for py_file in files:
     with open(py_file, 'r') as f:
-       code = f.read()
-        print(len(code))
-            input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
+    code = f.read()
+    input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
 
 generated_ids = model.generate(input_ids, max_length=20)
 xyz= tokenizer.decode(generated_ids[0], skip_special_tokens=True)
