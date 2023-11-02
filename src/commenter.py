@@ -17,7 +17,7 @@ current_dir = os.getcwd()
 # Get a list of all the files in the current directory, except for the current script
 files = glob.glob("*.py")
 files = [file for file in files if file != os.path.basename(__file__)]
-
+output = ""
 # Read each .py file and print its contents
 for py_file in files:
     with open(py_file, 'r') as f:
@@ -25,8 +25,11 @@ for py_file in files:
         input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
         generated_ids = model.generate(input_ids, max_length=20)
         xyz= tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-        output_handle = open("src/files/output.txt", "w+")
-        output_handle.write(f'{xyz}')
-        output_handle.close()
-        sys.exit(0)
+        print(xyz)
+        output += xyz
+print(output)
+output_handle = open("src/files/output.txt", "w+")
+output_handle.write(f'{output}')
+output_handle.close()
+sys.exit(0)
 
