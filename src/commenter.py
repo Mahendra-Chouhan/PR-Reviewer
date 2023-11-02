@@ -4,7 +4,7 @@ import torch
 import sys
 from transformers import AutoModel, AutoTokenizer
 
-checkpoint = "Salesforce/codet5p-220m-bimodal"
+checkpoint = "Salesforce/instructcodet5p-16b"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, trust_remote_code=True)
