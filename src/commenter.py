@@ -15,8 +15,8 @@ model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(device)
 current_dir = os.getcwd()
 
 # Get a list of all the files in the current directory, except for the current script
-files = glob.glob("*.py")
-files = [file for file in files if file != os.path.basename(__file__)]
+files = os.listdir(current_dir) 
+files = [file for file in files if file != os.path.basename(__file__) and file.split(".")[-1]== "py"]
 print(files)
 output = ""
 # Read each .py file and print its contents
@@ -27,7 +27,7 @@ for py_file in files:
         generated_ids = model.generate(input_ids, max_length=20)
         xyz= tokenizer.decode(generated_ids[0], skip_special_tokens=True)
         print(xyz)
-        output += xyz
+        output = output + "\n" + xyz
 print(output)
 output_handle = open("src/files/output.txt", "w+")
 output_handle.write(f'{output}')
