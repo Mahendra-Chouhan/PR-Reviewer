@@ -17,6 +17,7 @@ current_dir = os.getcwd()
 # Get a list of all the files in the current directory, except for the current script
 files = glob.glob("*.py")
 files = [file for file in files if file != os.path.basename(__file__)]
+print(files)
 output = ""
 # Read each .py file and print its contents
 for py_file in files:
