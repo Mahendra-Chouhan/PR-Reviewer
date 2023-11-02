@@ -22,8 +22,7 @@ files = [file for file in files if file != os.path.basename(__file__)]
 for py_file in files:
     with open(py_file, 'r') as f:
      code = f.read()
-print(code)
-
+    def print_code(code):
 input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
 
 generated_ids = model.generate(input_ids, max_length=20)
