@@ -21,21 +21,8 @@ files = [file for file in files if file != os.path.basename(__file__)]
 # Read each .py file and print its contents
 for py_file in files:
     with open(py_file, 'r') as f:
-        code = f.read()
-
-# code = """def svg_to_image(string, size=None):
-#     if isinstance(string, unicode):
-#         string = string.encode('utf-8')
-#         renderer = QtSvg.QSvgRenderer(QtCore.QByteArray(string))
-#     if not renderer.isValid():
-#         raise ValueError('Invalid SVG data.')
-#     if size is None:
-#         size = renderer.defaultSize()
-#         image = QtGui.QImage(size, QtGui.QImage.Format_ARGB32)
-#         painter = QtGui.QPainter(image)
-#         renderer.render(painter)
-#     return image"""
-
+     code = f.read()
+print(code)
 
 input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
 
