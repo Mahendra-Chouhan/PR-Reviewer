@@ -23,7 +23,7 @@ for py_file in files:
     with open(py_file, 'r') as f:
      code = f.read()
     def print_code(code):
-input_ids = tokenizer(code, return_tensors="pt").input_ids.to(device)
+input_ids = tokenizer(print_code, return_tensors="pt").input_ids.to(device)
 
 generated_ids = model.generate(input_ids, max_length=20)
 xyz= tokenizer.decode(generated_ids[0], skip_special_tokens=True)
