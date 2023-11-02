@@ -10,7 +10,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, trust_remote_code=True)
 model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(device)
 
-# files = glob.glob("*.py")
+# files == glob.glob("*.py")
 # for file in files:
 #     with open(file, "r") as f:
 #         code =f.read()
