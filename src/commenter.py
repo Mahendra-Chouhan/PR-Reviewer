@@ -1,5 +1,6 @@
 
 import glob
+import os
 import torch
 import sys
 from transformers import AutoModel, AutoTokenizer
@@ -10,10 +11,18 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, trust_remote_code=True)
 model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(device)
 
+# Get the current directory
+current_dir = os.getcwd()
+
+# Get a list of all the files in the current directory, except for the current script
 files = glob.glob("*.py")
-for file in files:
-    with open(file, "r") as f:
-        code =f.read()
+files = [file for file in files if file != os.path.basename(__file__)]
+
+# Read each .py file and print its contents
+for py_file in files:
+    with open(py_file, 'r') as f:
+        code = f.read()
+
 # code = """def svg_to_image(string, size=None):
 #     if isinstance(string, unicode):
 #         string = string.encode('utf-8')
