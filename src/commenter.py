@@ -28,5 +28,5 @@ for py_file in files:
         output_handle = open("src/files/output.txt", "w+")
         output_handle.write(f'{xyz}')
         output_handle.close()
-sys.exit(0)
+        sys.exit(0)
 
