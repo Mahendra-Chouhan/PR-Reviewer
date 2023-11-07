@@ -2,7 +2,7 @@ name: commenter
 on:
   push:
     branches:
-      - Arpits-branch
+      - main
   pull_request:
 
 jobs:
