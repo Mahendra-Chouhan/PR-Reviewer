@@ -16,7 +16,6 @@ Streamline Your GitHub Pull Requests with AI, co-authored with LLM(Large languag
 - Can be easily customized to fit your project needs
 - Easy to set up and use
 - Cost Analysis of each review
-- type-checking for python: **pyre-check**
 
 Code review flow
 1. **Creating**: Authors start modifying, adding, or deleting some code; once ready, they create a change.
