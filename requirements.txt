@@ -1,2 +1,3 @@
 torch
 transformers
+llama-cpp-python
