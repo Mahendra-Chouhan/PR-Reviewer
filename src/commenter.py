@@ -33,7 +33,7 @@ for file in all_files:
     # Print the file name
     print(f"Processing file: {file}")
 
-    # Open the file and read the code
+    # Open the file and read
     with open(file, "r") as f:
       code = f.read()
 
