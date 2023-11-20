@@ -5,7 +5,8 @@ from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 
 model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
-model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin" # the model is in bin format
+model_basename = "llama-2-13b-chat.ggml-vic13b-uncensored-q5_1.bin" # the model is in bin format
+
 
 # Get the path to the src directory
 src_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), "src")
