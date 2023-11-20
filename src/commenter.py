@@ -16,7 +16,6 @@ all_files = glob.glob(os.path.join(src_path, "*"))
 
 model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
 # GPU
-lcpp_llm = None
 lcpp_llm = Llama(
     model_path=model_path,
     n_threads=2, # CPU cores
