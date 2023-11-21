@@ -45,11 +45,10 @@ for file in all_files:
     '''
     
     response=lcpp_llm(prompt=prompt_template, max_tokens=256, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=True)
-    print(f"Generated comment: {response}")
 
 
     # Write the comment to the output file
     with open("src/files/output.txt", "a") as f:
-      f.write(f"{response}\n")
+      f.write(f"{response["choices"][0]["text"]}\n")
       f.write("\n")
       f.write("\n")
