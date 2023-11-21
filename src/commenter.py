@@ -1,10 +1,28 @@
 import glob
 import os
 import torch
+import re
 from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
 model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin"
+
+def minify(code):
+  """Minify code.
+
+  Args:
+    code: The code to minify.
+
+  Returns:
+    The minified code.
+  """
+
+  code = re.sub(r'#[^\n]*\n', '', code)
+  code = re.sub(r'\s+', ' ', code)
+  code = re.sub(r'\n\n+', '\n', code)
+  code = re.sub(r'\s+$', '', code)
+
+  return code
 
 
 # Get the path to the src directory
@@ -35,8 +53,9 @@ for file in all_files:
     # Open the file and read
     with open(file, "r") as f:
       code = f.read()
+      code = minify(code)
 
-    prompt = ("Suggest helpful changes to the code: function additionFunction(a, b) {  return a + b; } let num1 = 5; let num2 = 10; let sum = additionFunction(num1, num2); console.log("Sum of given numbers is :", sum);")
+    prompt = ("Suggest helpful changes to the code: \n" + code)
     prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
 
     USER: {prompt}
