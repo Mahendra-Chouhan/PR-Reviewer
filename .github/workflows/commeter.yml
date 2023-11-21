@@ -1,14 +1,21 @@
-name: commenter
+name: PR Reviewer
 on:
+  push:
   pull_request:
 
 jobs:
-  test:
+  Review:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
+
+      - name: Cache dependencies
+        uses: actions/cache@v3.3.2
+        with:
+          path: ${{ env.HOME }}/.cache/pip
+          key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10' 
