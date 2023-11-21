@@ -48,9 +48,6 @@ for file in all_files:
   # Check if the file is a regular file
   if os.path.isfile(file):
 
-    # Print the file name
-    print(f"Processing file: {file}")
-
     # Open the file and read
     with open(file, "r") as f:
       code = f.read()
