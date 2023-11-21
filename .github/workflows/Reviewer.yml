@@ -3,6 +3,27 @@ on:
   pull_request:
 
 jobs:
+  PR-diff-hunk:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repo
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed to checkout all branches for this Action to work
+
+      # Check the PR diff using the current branch and the base branch of the PR
+      - uses: GrantBirki/git-diff-action@vX.X.X
+        id: git-diff-action
+        with:
+          raw_diff_file_output: diff.txt
+          file_output_only: "true"
+
+      # Print the diff in raw git format
+      - name: print raw diff
+        env:
+          DIFF: ${{ steps.git-diff-action.outputs.raw-diff-path }}
+        run: cat $DIFF > src/files/diff_hunk.txt
+        
   Review:
     runs-on: ubuntu-latest
     permissions:
