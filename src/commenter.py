@@ -37,14 +37,14 @@ for file in all_files:
       code = f.read()
 
     prompt = ("Suggest helpful changes to the code: function additionFunction(a, b) {  return a + b; } let num1 = 5; let num2 = 10; let sum = additionFunction(num1, num2); console.log('Sum of given numbers is :', sum);")
-    prompt_template=f'''
-
-    USER:{prompt}
+    prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
     
-    CODE-ASSISTANT:
+    USER: {prompt}
+    
+    ASSISTANT:
     '''
     
-    response=lcpp_llm(prompt=prompt_template, max_tokens=256, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=True)
+    response=lcpp_llm(prompt=prompt_template, max_tokens=256, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
     response = response["choices"][0]["text"]
 
 
