@@ -36,7 +36,7 @@ for file in all_files:
     with open(file, "r") as f:
       code = f.read()
 
-    prompt = ("Suggest helpful changes to the code" + code)
+    prompt = ("Suggest helpful changes to the code")
     prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
 
     USER: {prompt}
