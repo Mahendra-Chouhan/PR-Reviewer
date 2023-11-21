@@ -26,6 +26,7 @@ jobs:
         run: |
           git fetch origin main
           git diff origin/main..HEAD > mydiff
+          find . -type f -name mydiff
           echo "mydiff = "
           cat mydiff
           
