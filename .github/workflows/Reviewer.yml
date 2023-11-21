@@ -1,6 +1,5 @@
 name: PR Reviewer
 on:
-  push:
   pull_request:
 
 jobs:
@@ -12,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Cache dependencies
-        uses: actions/cache@v3.32
+        uses: actions/cache@v3
         with:
           path: ${{ env.HOME }}/.cache/pip
           key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}
