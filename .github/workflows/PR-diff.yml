@@ -33,5 +33,5 @@ jobs:
       # Print the diff in raw git format
       - name: print raw diff
         env:
-          DIFF: ${{ steps.git-diff-action.outputs.raw-diff-path }}
+          DIFF: ${{ steps.git-diff-action.outputs.raw-diff-path }} > diff.txt
         run: cat $DIFF
