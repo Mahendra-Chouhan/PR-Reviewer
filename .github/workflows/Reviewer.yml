@@ -2,35 +2,33 @@ name: PR Reviewer
 on:
   pull_request:
 
-jobs:
-  PR-diff-hunk:
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout the repo
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # needed to checkout all branches for this Action to work
-
-      # Check the PR diff using the current branch and the base branch of the PR
-      - uses: GrantBirki/git-diff-action@v2.1.1
-        id: git-diff-action
-        with:
-          raw_diff_file_output: diff.txt
-          file_output_only: "true"
-
-      # Print the diff in raw git format
-      - name: print raw diff
-        env:
-          DIFF: ${{ steps.git-diff-action.outputs.raw-diff-path }}
-        run: cat $DIFF > src/files/diff_hunk.txt
-        
+jobs:        
   Review:
     runs-on: ubuntu-latest
+    env:
+      PR_AUTHOR_GITHUB_ID: ${{ github.event.pull_request.user.login }}
     permissions:
       pull-requests: write
     steps:
       - uses: actions/checkout@v2
-
+      
+      - name: Find Github id of PR AUTHOR
+        run: |
+          echo "PR author: ${PR_AUTHOR_GITHUB_ID}"
+      - name: Checkout pull request HEAD
+        id: checkout_pr_head
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: print-diff
+        shell: bash
+        run: |
+          git fetch origin main
+          git diff origin/main..HEAD > mydiff
+          echo "mydiff = "
+          cat mydiff
+          
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
