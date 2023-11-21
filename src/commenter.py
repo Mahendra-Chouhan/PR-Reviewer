@@ -38,10 +38,13 @@ for file in all_files:
 
     prompt = ("Suggest helpful changes to the code: function additionFunction(a, b) {  return a + b; } let num1 = 5; let num2 = 10; let sum = additionFunction(num1, num2); console.log('Sum of given numbers is :', sum);")
     prompt_template=f'''
+
+    USER:{prompt}
+    
     CODE-ASSISTANT:
     '''
     
-    response=lcpp_llm(prompt=prompt, max_tokens=256, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=True)
+    response=lcpp_llm(prompt=prompt_template, max_tokens=256, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=True)
     response = response["choices"][0]["text"]
 
 
