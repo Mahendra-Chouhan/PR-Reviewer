@@ -36,7 +36,7 @@ for file in all_files:
     with open(file, "r") as f:
       code = f.read()
 
-    prompt = ("Suggest helpful changes to the code: function additionFunction(a, b) {  return a + b; } let num1 = 5; let num2 = 10; let sum = additionFunction(num1, num2); console.log("Sum of given numbers is :", sum);")
+    prompt = ("Suggest helpful changes to the code: function additionFunction(a, b) {  return a + b; } let num1 = 5; let num2 = 10; let sum = additionFunction(num1, num2); console.log('Sum of given numbers is :', sum);")
     prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
 
     USER: {prompt}
