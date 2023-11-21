@@ -64,8 +64,8 @@ for file in all_files:
     ASSISTANT:
     '''
     
-    response=lcpp_llm(prompt=prompt_template, max_tokens=1024, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=True)
-    response = response["choices"][0]["text"][2]
+    response=lcpp_llm(prompt=prompt_template, max_tokens=1024, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
+    response = response["choices"][0]["text"]
 
 
     # Write the comment to the output file
