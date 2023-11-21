@@ -8,38 +8,39 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # needed to checkout all branches for the Print Raw Difference to work
+          
+      # Check the PR diff using the current branch and the base branch of the PR
+      - uses: GrantBirki/git-diff-action@v2.1.1
+        id: git-diff-action
+        with:
+          raw_diff_file_output: diff.txt
+          file_output_only: "true"
+      
+      # Print the diff in raw git format
+      - name: print raw diff
+        env:
+          DIFF: ${{ steps.git-diff-action.outputs.raw-diff-path }} 
+        run: cat $DIFF > diff_hunk.txt
 
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ${{ env.HOME }}/.cache/pip
           key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}-{{ fileset.modifiedTime('requirements.txt') }}
-      
-      
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10' 
- 
       - name: installations
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Exporting Commit
-        run: |
-          git log > commits.txt
-          cat commits.txt
-
-          
       - name: Run Python script
         run: python src/commenter.py
-
-        
       - name: Read PR comment from file
         run: cat src/files/output.txt > pr_comment.txt
-
-        
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
