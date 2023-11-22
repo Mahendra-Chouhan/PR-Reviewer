@@ -13,8 +13,8 @@ model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename
 # GPU
 lcpp_llm = Llama(
     model_path=model_path,
-    n_threads=2, # CPU cores
-    n_batch=512, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
+    n_threads=8, # CPU cores
+    n_batch=256, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
     n_ctx = 3072
     )
@@ -40,5 +40,3 @@ response = response["choices"][0]["text"]
 # Write the comment to the output file
 with open("src/files/output.txt", "a") as f:
   f.write(f"{response}\n")
-  f.write("\n")
-  f.write("\n")
