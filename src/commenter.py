@@ -52,7 +52,7 @@ for file in all_files:
     print(f"Processing file: {file}")
 
     # Open the file and read it
-    with open(file, "r") as f:
+    with open("diff.txt", "r") as f:
       code = f.read()
       code = minify(code)
 
