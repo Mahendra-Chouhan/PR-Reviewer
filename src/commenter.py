@@ -18,7 +18,7 @@ lcpp_llm = Llama(
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
     n_ctx = 1024
     )
-repo_path = GITHUB_WORKSPACE
+repo_path = os.path(os.getenv("GITHUB_WOKRSPACE"))
 with open("{repo_path}/.github/workflows/mydiff.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
