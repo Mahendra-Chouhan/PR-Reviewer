@@ -8,6 +8,17 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ~/.pip
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: /install.sh
+    
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10' 
@@ -15,16 +26,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        id: cache
-        with:
-          path: ${{ env.HOME }}/.cache/pip
-          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: /install.sh
         
       - name: Run Python script
         run: python src/commenter.py
