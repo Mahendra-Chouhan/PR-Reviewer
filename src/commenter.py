@@ -6,15 +6,15 @@ from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 
 
-model_name_or_path = "TheBloke/Llama-2-7B-GGML"
-model_basename = "llama-2-7b.ggmlv3.q5_K_M.bin"
+model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
+model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin"
 
 model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
 # GPU
 lcpp_llm = Llama(
     model_path=model_path,
-    n_threads=2, # CPU cores
-    n_batch=512, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
+    n_threads=8, # CPU cores
+    n_batch=1024, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
     n_ctx = 3072
     )
@@ -27,7 +27,7 @@ with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
     diff = diff_handle.read()
 
 prompt = ("Rhaving + in front of a line suggests that the code is being added, while - in front of a line suggests subtraction of that code line. Explain the code (without repeating it): \n" + diff)
-prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
+prompt_template=f'''SYSTEM: You are a helpful, respectful and responsible code reviewing assistant. Your duty is to critically review code.
 
 USER: {prompt}
 
@@ -39,6 +39,4 @@ response = response["choices"][0]["text"]
 
 # Write the comment to the output file
 with open("src/files/output.txt", "a") as f:
-  f.write(f"{response}\n")
-  f.write("\n")
-  f.write("\n")
+  f.write(f"{response}")
