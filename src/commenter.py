@@ -49,7 +49,7 @@ for file in all_files:
     response = response["choices"][0]["text"]
 
 
-    # Write the comment to the output file
+    # Write the comment in the output file
     with open("src/files/output.txt", "a") as f:
       f.write(f"{response}\n")
       f.write("\n")
