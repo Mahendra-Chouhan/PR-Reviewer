@@ -37,5 +37,11 @@ jobs:
           # shellcheck disable=SC2086
           echo "diff=$(cat "diff.txt")" >> $GITHUB_ENV
 
-      - name: show diff.txt file content
-        run: cat diff.txt
+      - name: Upload file to repository
+        run: |
+         git config --global user.name "Mahendra S Chouhan"
+         git config --global user.email "mahendrachouhan01@gmail.com"
+         git add diff.txt
+         git commit -m "commit message"
+         git push
+         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
