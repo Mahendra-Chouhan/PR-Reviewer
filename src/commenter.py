@@ -36,23 +36,23 @@ lcpp_llm = Llama(
 
     # Open the file and read it
     with open(".github/workflows/diff.txt", "a") as f:
-    code = f.read()
-    code = minify(code)
-
-    prompt = ("Suggest helpful changes to the code: \n" + code)
-    prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
-
-    USER: {prompt}
-
-    ASSISTANT:
-    '''
-    
-    response=lcpp_llm(prompt=prompt_template, max_tokens=1024, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
-    response = response["choices"][0]["text"]
-
-
-    # Write the comment to the output file
-    with open("src/files/output.txt", "a") as f:
-      f.write(f"{response}\n")
-      f.write("\n")
-      f.write("\n")
+      code = f.read()
+      code = minify(code)
+  
+      prompt = ("Suggest helpful changes to the code: \n" + code)
+      prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
+  
+      USER: {prompt}
+  
+      ASSISTANT:
+      '''
+      
+      response=lcpp_llm(prompt=prompt_template, max_tokens=1024, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
+      response = response["choices"][0]["text"]
+  
+  
+      # Write the comment to the output file
+      with open("src/files/output.txt", "a") as f:
+        f.write(f"{response}\n")
+        f.write("\n")
+        f.write("\n")
