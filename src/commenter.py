@@ -24,11 +24,6 @@ def minify(code):
 
   return code
 
-
-# Get the path to the src directory
-src_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".github/workflows")
-src_path = os.path.expandvars(src_path)
-
 model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
 # GPU
 lcpp_llm = Llama(
@@ -40,7 +35,7 @@ lcpp_llm = Llama(
     )
 
     # Open the file and read it
-with open("diff.txt", "r") as f:
+    with open(".github/workflows/diff.txt", "a") as f:
     code = f.read()
     code = minify(code)
 
