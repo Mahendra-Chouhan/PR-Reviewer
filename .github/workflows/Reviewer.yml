@@ -20,16 +20,15 @@ jobs:
             ${{ runner.os }}-pip-
       - uses: actions/setup-python@v4
         with:
-            python-version: '3.10' 
+            python-version: '3.10'
       - if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
         name: installations
         continue-on-error: true
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install torch
       - name: List pip packages
-        run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages
+        run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ; pip install torch
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
