@@ -27,6 +27,7 @@ jobs:
           git fetch origin main
           git diff origin/main..HEAD > difference_hunk.txt
           find . -type f -name difference_hunk.txt
+          pwd
           echo "difference hunk = "
           cat difference_hunk.txt
           
