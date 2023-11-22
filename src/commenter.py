@@ -16,7 +16,7 @@ lcpp_llm = Llama(
     n_threads=2, # CPU cores
     n_batch=512, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
-    n_ctx = 1024
+    n_ctx = 4096
     )
 
 # Get the path of the GitHub workspace
@@ -34,7 +34,7 @@ USER: {prompt}
 ASSISTANT:
 '''
     
-response=lcpp_llm(prompt=prompt_template, max_tokens=1024, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
+response=lcpp_llm(prompt=prompt_template, max_tokens=4096, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
 response = response["choices"][0]["text"]
 
 # Write the comment to the output file
