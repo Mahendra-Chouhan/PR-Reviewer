@@ -19,6 +19,7 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 repo_path = os.path(os.getenv("GITHUB_WOKRSPACE"))
+repo_path = os.path.expandsvars(repo_path)
 with open("{repo_path}/.github/workflows/mydiff.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
