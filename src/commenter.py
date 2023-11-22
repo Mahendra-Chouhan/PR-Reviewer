@@ -18,10 +18,8 @@ lcpp_llm = Llama(
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
     n_ctx = 1024
     )
-# Get the path to the workflows directory
-workflows_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".github/workflows")
-workflows_path = os.path.expandvars(workflows_path)
-with open(f"{workflows_path}/difference_hunk.txt", "r") as diff_handle:
+
+with open("./difference_hunk.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
 prompt = ("Review the code difference and suggest changes: \n" + diff)
