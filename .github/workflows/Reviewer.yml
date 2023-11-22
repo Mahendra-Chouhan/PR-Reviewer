@@ -27,8 +27,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+      - name: torch install
+        run: |
+          pip install torch
       - name: List pip packages
-        run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ; pip install torch
+        run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ;
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
