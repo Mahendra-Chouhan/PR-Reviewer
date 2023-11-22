@@ -26,7 +26,7 @@ github_workspace_path = os.getenv("GITHUB_WORKSPACE")
 with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
     diff = diff_handle.read()
 
-prompt = ("Review the pull request code difference: \n" + diff)
+prompt = ("Rhaving + in front of a line suggests that the code is being added, while - in front of a line suggests subtraction of that code line. Explain the code (without repeating it): \n" + diff)
 prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
 
 USER: {prompt}
