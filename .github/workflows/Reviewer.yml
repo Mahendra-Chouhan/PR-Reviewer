@@ -15,7 +15,7 @@ jobs:
         with:
           # pip cache files are stored in `~/.cache/pip`
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('{{github.workspace}}/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**./requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - uses: actions/setup-python@v4
@@ -27,9 +27,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
-      - name: torch install
-        run: |
-          pip install torch
       - name: List pip packages
         run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ;
       - name: Run Python script
