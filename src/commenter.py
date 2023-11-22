@@ -19,10 +19,10 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 
-with open("./mydiff.txt", "r") as diff_handle:
+with open("{{github.workspace}}/.github/workflows/mydiff.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
-prompt = ("Suggest helpful changes to the code: \n" + diff)
+prompt = ("Review the code difference and suggest changes: \n" + diff)
 prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
 
 USER: {prompt}
