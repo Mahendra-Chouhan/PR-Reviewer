@@ -39,9 +39,6 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 
-# Loop through all files in the src directory
-for file in all_files:
-
   # Check if the file is a regular file
   if os.path.isfile(file):
 
