@@ -40,9 +40,9 @@ lcpp_llm = Llama(
     )
 
     # Open the file and read it
-    with open("diff.txt", "r") as f:
-      code = f.read()
-      code = minify(code)
+with open("diff.txt", "r") as f:
+    code = f.read()
+    code = minify(code)
 
     prompt = ("Suggest helpful changes to the code: \n" + code)
     prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
