@@ -19,7 +19,7 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 
-with open("{{github.workspace}}/.github/workflows/mydiff.txt", "r") as diff_handle:
+with open("GITHUB_WORKSPACE/.github/workflows/mydiff.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
 prompt = ("Review the code difference and suggest changes: \n" + diff)
