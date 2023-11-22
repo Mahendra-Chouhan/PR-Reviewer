@@ -18,8 +18,8 @@ lcpp_llm = Llama(
     n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
     n_ctx = 1024
     )
-
-with open("GITHUB_WORKSPACE/.github/workflows/mydiff.txt", "r") as diff_handle:
+repo_path = GITHUB_WORKSPACE
+with open("{repo_path}/.github/workflows/mydiff.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
 prompt = ("Review the code difference and suggest changes: \n" + diff)
