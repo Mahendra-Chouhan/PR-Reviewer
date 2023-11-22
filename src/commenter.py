@@ -21,7 +21,7 @@ lcpp_llm = Llama(
 # Get the path to the workflows directory
 workflows_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".github/workflows")
 workflows_path = os.path.expandvars(workflows_path)
-with open(f"{workflows_path}/mydiff.txt", "r") as diff_handle:
+with open(f"{workflows_path}/difference_hunk.txt", "r") as diff_handle:
   diff = diff_handle.read()
 
 prompt = ("Review the code difference and suggest changes: \n" + diff)
