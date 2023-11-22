@@ -25,10 +25,10 @@ jobs:
         shell: bash
         run: |
           git fetch origin main
-          git diff origin/main..HEAD > mydiff
-          find . -type f -name mydiff
-          echo "mydiff = "
-          cat mydiff
+          git diff origin/main..HEAD > difference_hunk.txt
+          find . -type f -name difference_hunk.txt
+          echo "difference hunk = "
+          cat difference_hunk.txt
           
       - name: Cache dependencies
         uses: actions/cache@v3
