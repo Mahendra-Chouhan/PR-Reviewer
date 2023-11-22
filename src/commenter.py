@@ -39,12 +39,6 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 
-  # Check if the file is a regular file
-  if os.path.isfile(file):
-
-    # Print the file name
-    print(f"Processing file: {file}")
-
     # Open the file and read it
     with open("diff.txt", "r") as f:
       code = f.read()
