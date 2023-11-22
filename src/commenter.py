@@ -19,8 +19,12 @@ lcpp_llm = Llama(
     n_ctx = 1024
     )
 
-with open("./difference_hunk.txt", "r") as diff_handle:
-  diff = diff_handle.read()
+# Get the path of the GitHub workspace
+github_workspace_path = os.getenv("GITHUB_WORKSPACE")
+
+# Open and read the "difference_hunk.txt" file
+with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
+    diff = diff_handle.read()
 
 prompt = ("Review the code difference and suggest changes: \n" + diff)
 prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
