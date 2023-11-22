@@ -15,7 +15,7 @@ jobs:
         with:
           # pip cache files are stored in `~/.cache/pip`
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**./requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
       - uses: actions/setup-python@v4
