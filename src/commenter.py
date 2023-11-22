@@ -11,7 +11,7 @@ model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin"
 src_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), "src")
 src_path = os.path.expandvars(src_path)
 
-# Find all files in the src dirc
+# Find all files in the src dir
 all_files = glob.glob(os.path.join(src_path, "*"))
 
 model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
