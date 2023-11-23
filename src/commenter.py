@@ -7,10 +7,6 @@ from llama_cpp import Llama
 
 model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
 model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin"
-
-
-
-# Get the path to the src directory
 src_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), "src")
 src_path = os.path.expandvars(src_path)
 
