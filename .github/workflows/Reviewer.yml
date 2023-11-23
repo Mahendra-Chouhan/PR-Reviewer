@@ -27,6 +27,15 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+          
+      - name: Save cache
+        id: cache-save
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ~/requirements.txt
+          key: ${{ steps.cache-save.outputs.cache-primary-key }}
+        
       - name: List pip packages
         run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ;
       - name: Run Python script
