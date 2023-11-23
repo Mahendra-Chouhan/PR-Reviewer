@@ -7,7 +7,7 @@ try:
   import sys
   cache_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".cache/pip")
   cache_path = os.path.expandvars(cache_path)
-  sys.path.insert(1, cache_path)
+  sys.path.append(cache_path)
   import torch
   from huggingface_hub import hf_hub_download
   from llama_cpp import Llama
