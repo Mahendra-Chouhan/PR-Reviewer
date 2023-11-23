@@ -5,7 +5,7 @@ import re
 #try and except block for retrieving dependencies from cache.. and stuff.
 try:
   import sys
-  cache_path = "/home/runner/work/PR-Reviewer/PR-Reviewer/.cache/pip"  
+  cache_path = "/home/runner/work/PR-Reviewer/.cache/pip"  
   sys.path.append(cache_path)
   import torch
   from huggingface_hub import hf_hub_download
