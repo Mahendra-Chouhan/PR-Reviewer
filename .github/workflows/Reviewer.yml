@@ -19,6 +19,11 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Display Cache Path
+        id: display-cache-path
+        run: echo "::set-output name=cache-path::${{ runner.workspace }}/${{ steps.cache-python.outputs.cache-path }}"
+      
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10'
