@@ -30,7 +30,7 @@ jobs:
       - name: List pip packages
         run: echo "Cache Hit Status - ${{ steps.cache-python.outputs.cache-hit }}"; pip list packages ;
       - name: Run Python script
-        run: python src/commenter.py
+        run: python src/commenter.py -d ~/.cache/pip
       - name: Read PR comment from file
         run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
