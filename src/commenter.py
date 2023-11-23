@@ -1,6 +1,5 @@
 import glob
 import os
-import torch
 import re
 
 #try and except block for retrieving dependencies from cache
@@ -9,11 +8,13 @@ try:
   cache_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".cache/pip")
   cache_path = os.path.expandvars(cache_path)
   sys.path.insert(1, cache_path)
+  import torch
   from huggingface_hub import hf_hub_download
   from llama_cpp import Llama
 
   
 except:
+  import torch
   from huggingface_hub import hf_hub_download
   from llama_cpp import Llama
 model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
