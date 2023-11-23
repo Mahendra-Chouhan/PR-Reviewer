@@ -30,15 +30,15 @@ prompt = ("""you are a code review assistant. Concisely summarize the major code
 
 CHANGE: Explanation.
 
-Here is the code difference, please provide your review: """ + diff)
-prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully.
+Here is the code difference: """ + diff)
+prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully. 
 
 USER: {prompt}
 
 ASSISTANT:
 '''
     
-response=lcpp_llm(prompt=prompt_template, max_tokens=1536, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=150, echo=False)
+response=lcpp_llm(prompt=prompt_template, max_tokens=1536, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=50, echo=False)
 response = response["choices"][0]["text"]
 
 # Write the comment to the output file
