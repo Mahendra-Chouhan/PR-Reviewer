@@ -2,8 +2,20 @@ import glob
 import os
 import torch
 import re
-from huggingface_hub import hf_hub_download
-from llama_cpp import Llama
+
+#try and except block for retrieving dependencies from cache
+try:
+  import sys
+  cache_path = os.path.join(os.getenv("GITHUB_WORKSPACE"), ".cache/pip")
+  cache_path = os.path.expandvars(cache_path)
+  sys.path.insert(1, cache_path)
+  from huggingface_hub import hf_hub_download
+  from llama_cpp import Llama
+
+  
+except:
+  from huggingface_hub import hf_hub_download
+  from llama_cpp import Llama
 model_name_or_path = "TheBloke/Llama-2-13B-chat-GGML"
 model_basename = "llama-2-13b-chat.ggmlv3.q5_1.bin"
 
