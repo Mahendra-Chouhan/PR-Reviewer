@@ -2,9 +2,6 @@ import glob
 import os
 import re
 import sys
-
-#get to the cache dir
-sys.path.insert(1, '~/.cache/pip')
 import torch
 import huggingface_hub
 import llama_cpp
