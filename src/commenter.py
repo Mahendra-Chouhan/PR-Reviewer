@@ -38,7 +38,7 @@ USER: {prompt}
 ASSISTANT:
 '''
     
-response=lcpp_llm(prompt=prompt_template, max_tokens=1536, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=50, echo=False)
+response=lcpp_llm(prompt=prompt_template, max_tokens=1536, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=100, echo=False)
 response = response["choices"][0]["text"]
 
 # Write the comment to the output file
