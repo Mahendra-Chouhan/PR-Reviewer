@@ -26,8 +26,12 @@ github_workspace_path = os.getenv("GITHUB_WORKSPACE")
 with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
     diff = diff_handle.read()
 
-prompt = ("having + in front of a line suggests that the code is being added, while - in front of a line suggests subtraction of that code line. Given to you is a pull-request difference. Explain the difference between the code (without repeating it): \n" + diff)
-prompt_template=f'''SYSTEM: You are a helpful, respectful and responsible code review assistant. Your duty is to critically review code.
+prompt = (diff)
+prompt_template=f'''SYSTEM: you are a code review assistant. Concisely summarize the major code difference in ONE LINE, explaining the difference in a way humans can understand. do it in the format:
+
+CHANGE: Explanation.
+
+Can I give you the code difference now?
 
 USER: {prompt}
 
@@ -39,6 +43,4 @@ response = response["choices"][0]["text"]
 
 # Write the comment to the output file
 with open("src/files/output.txt", "a") as f:
-  f.write(f"{response}\n")
-  f.write("\n")
-  f.write("\n")
+  f.write(f"{response}")
