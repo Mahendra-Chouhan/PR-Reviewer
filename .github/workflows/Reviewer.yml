@@ -33,7 +33,7 @@ jobs:
 
       - name: download llm file
         id: "litllamadownload"
-        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -O ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
+        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -P ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
 
 
       - name: Cache dependencies
