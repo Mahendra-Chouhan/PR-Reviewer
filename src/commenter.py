@@ -28,7 +28,7 @@ ASSISTANT:
 '''
 
 # Load the model
-model = torch.jit.load(model_path)
+model = torch.load(model_path)
 
 # Tokenize the prompt and input
 tokenizer = PreTrainedTokenizerFast.from_pretrained("facebook/bart-base")
