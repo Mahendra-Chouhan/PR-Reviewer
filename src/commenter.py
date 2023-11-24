@@ -2,7 +2,7 @@ import transformers
 import torch
 
 # Load the quantized Llama 7B model
-model = transformers.AutoModelForSequenceClassification.from_pretrained("msinghC/llm-pr-review")
+model = transformers.AutoModelForSequenceClassification.from_pretrained("llm-pr-review/llama-gptq.4bit.pth")
 
 # Get the path of the GitHub workspace
 github_workspace_path = os.getenv("GITHUB_WORKSPACE")
