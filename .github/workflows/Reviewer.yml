@@ -30,7 +30,12 @@ jobs:
           pwd
           echo "difference hunk = "
           cat difference_hunk.txt
-          
+
+      - name: download llm file
+        id: "litllamadownload"
+        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -P ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
+
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
@@ -42,14 +47,21 @@ jobs:
       - name: installations
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run Python script
-        run: python src/lit_llama/commenter.py
-      - name: Read PR comment from file
-        run: cat src/files/output.txt > pr_comment.txt
+          pip install -r requirements-lit-llama.txt
+      - name: Run lit-llama script
+        id: "litllama"
+        run: |
+          cd src/lit_llama
+          echo ::set-output name=output::$(python generate_review.py --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/lit-llama-adapter-finetuned.pth)
+        
+      # - name: Run Python script
+      #   run: python src/commenter.py
+      # - name: Read PR comment from file
+      #   run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
-          message-path: pr_comment.txt
+          message: |
+              ${{ steps.litllama.outputs.output }}
           repo-directory: './'
           requirements-path: 'requirements.txt'
