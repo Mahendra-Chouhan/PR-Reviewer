@@ -30,7 +30,12 @@ jobs:
           pwd
           echo "difference hunk = "
           cat difference_hunk.txt
-          
+
+      - name: download llm file
+        id: "lit-llama download"
+        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -O ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
+
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
