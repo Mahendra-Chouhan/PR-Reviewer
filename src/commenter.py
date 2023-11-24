@@ -129,9 +129,9 @@ def main(
     fabric.print("Respond: " + output)
 
     t = time.time() - t0
-     Write the comment to the output file
-     with open("src/files/output.txt", "a") as f:
-       f.write(f"{output}")
+     #Write the comment to the output file
+    with open("src/files/output.txt", "a") as f:
+        f.write(f"{output}")
 
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total, {len(test_data) / t:.02f} entries/sec")
     if fabric.device.type == "cuda":
