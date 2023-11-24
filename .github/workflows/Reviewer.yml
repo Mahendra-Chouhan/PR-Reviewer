@@ -44,7 +44,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
       - name: Run Python script
-        run: python src/commenter.py
+        run: python src/lit_llama/commenter.py
       - name: Read PR comment from file
         run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
