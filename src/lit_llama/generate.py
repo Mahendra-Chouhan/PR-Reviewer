@@ -52,10 +52,10 @@ def generate(
         logits = model(idx_cond.view(1, -1))
         logits = logits[0, -1] / temperature
 
-        # optionally crop the logits to only the top k options
-        if top_k is not None:
-            v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
-            logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
+        # # optionally crop the logits to only the top k options
+        # if top_k is not None:
+        #     v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
+        #     logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
 
         probs = torch.nn.functional.softmax(logits, dim=-1)
         idx_next = torch.multinomial(probs, num_samples=1)
