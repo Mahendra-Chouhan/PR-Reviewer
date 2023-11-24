@@ -2,6 +2,7 @@ import os
 import torch
 from huggingface_hub import hf_hub_download
 from transformers import BartTokenizer
+from generate import generate
 
 model_name_or_path = "msinghC/llm-pr-review"
 model_basename = "llama-gptq.4bit.pth"
