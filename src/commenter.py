@@ -1,7 +1,8 @@
 import os
 import torch
-import transformers
+from transformers import PreTrainedTokenizerFast
 from huggingface_hub import hf_hub_download
+from transformers import BertTokenizerFast
 
 model_name_or_path = "msinghC/llm-pr-review"
 model_basename = "llama-gptq.4bit.pth"
