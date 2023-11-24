@@ -1,23 +1,8 @@
-import glob
-import os
+import transformers
 import torch
-import re
-from huggingface_hub import hf_hub_download
-from llama_cpp import Llama
 
-
-model_name_or_path = "msinghC/llm-pr-review"
-model_basename = "llama-gptq.4bit.pth"
-
-model_path = hf_hub_download(repo_id=model_name_or_path, filename=model_basename)
-# GPU
-lcpp_llm = Llama(
-    model_path=model_path,
-    n_threads=2, # CPU cores
-    n_batch=512, # Should be between 1 and n_ctx, consider the amount of VRAM in your GPU.
-    n_gpu_layers=32, # Change this value based on your model and your GPU VRAM pool.
-    n_ctx = 3072
-    )
+# Load the quantized Llama 7B model
+model = transformers.AutoModelForSequenceClassification.from_pretrained("msinghC/llm-pr-review")
 
 # Get the path of the GitHub workspace
 github_workspace_path = os.getenv("GITHUB_WORKSPACE")
@@ -31,16 +16,16 @@ prompt = ("""you are a code review assistant. Concisely summarize the major code
 CHANGE: Explanation.
 
 Here is the code difference: """ + diff)
-prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully. 
 
-USER: {prompt}
+# Generate the code review comment
+encoded_prompt = model.tokenizer(prompt, return_tensors="pt")
+output = model(**encoded_prompt)
+logits = output.logits
+prediction = logits.argmax(-1).item()
 
-ASSISTANT:
-'''
-    
-response=lcpp_llm(prompt=prompt_template, max_tokens=1536, temperature=0.5, top_p=0.95, repeat_penalty=1.2, top_k=50, echo=False)
-response = response["choices"][0]["text"]
+# Format the comment response
+response = model.config.id2label[prediction]
 
 # Write the comment to the output file
 with open("src/files/output.txt", "a") as f:
-  f.write(f"{response}")
+    f.write(f"{response}")
