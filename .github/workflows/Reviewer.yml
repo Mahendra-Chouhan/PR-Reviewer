@@ -52,7 +52,7 @@ jobs:
         id: "litllama"
         run: |
           cd src/lit_llama
-          echo ::set-output name=output::$(python generate_review.py --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B)
+          echo ::set-output name=output::$(python generate_review.py --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/lit-llama-adapter-finetuned.pth)
         
       # - name: Run Python script
       #   run: python src/commenter.py
