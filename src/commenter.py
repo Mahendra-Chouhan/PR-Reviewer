@@ -38,7 +38,7 @@ encoded_input = tokenizer(diff, truncation=True, padding=True, return_tensors="p
 
 # Generate the response
 with torch.no_grad():
-  output = model.generate(
+  output = generate(
       input_ids=encoded_input["input_ids"],
       attention_mask=encoded_input["attention_mask"],
       decoder_start_token_id=tokenizer.pad_token_id,
