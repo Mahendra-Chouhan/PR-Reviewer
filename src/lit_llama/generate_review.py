@@ -77,8 +77,8 @@ def main(
     fabric = L.Fabric(devices=1)
     dtype = torch.bfloat16 if fabric.device.type == "cuda" and torch.cuda.is_bf16_supported() else torch.float32
     
-    fabric.print("Instuction: " + sample["instruction"])
-    fabric.print("Input: " + sample["input"])
+    print("Instuction: " + sample["instruction"])
+    print("Input: " + sample["input"])
     
     print("Loading model ...", file=sys.stderr)
     t0 = time.time()
@@ -124,9 +124,9 @@ def main(
     output = tokenizer.decode(output)
     output = output.split("### Response:\n")[1].strip()
     
-    fabric.print("Instuction: " + sample["instruction"])
-    fabric.print("Input: " + sample["input"])
-    fabric.print("Respond: " + output)
+    print("Instuction: " + sample["instruction"])
+    print("Input: " + sample["input"])
+    print("Respond: " + output)
 
     t = time.time() - t0
     # Write the comment to the output file
