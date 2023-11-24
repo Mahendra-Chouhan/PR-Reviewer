@@ -1,8 +1,7 @@
 import os
 import torch
-from transformers import PreTrainedTokenizerFast
 from huggingface_hub import hf_hub_download
-from transformers import BertTokenizerFast
+from transformers import BartTokenizer
 
 model_name_or_path = "msinghC/llm-pr-review"
 model_basename = "llama-gptq.4bit.pth"
@@ -32,7 +31,8 @@ ASSISTANT:
 model = torch.load(model_path)
 
 # Tokenize the prompt and input
-tokenizer = PreTrainedTokenizerFast.from_pretrained("facebook/bart-base")
+tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
+tokenizer.pad_token = tokenizer.eos_token
 encoded_prompt = tokenizer(prompt_template, truncation=True, padding=True, return_tensors="pt")
 encoded_input = tokenizer(diff, truncation=True, padding=True, return_tensors="pt")
 
