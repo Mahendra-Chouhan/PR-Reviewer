@@ -32,7 +32,7 @@ jobs:
           cat difference_hunk.txt
 
       - name: download llm file
-        id: "lit-llama download"
+        id: "litllamadownload"
         run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -O ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
 
 
@@ -49,7 +49,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements-lit-llama.txt
       - name: Run lit-llama script
-        id: "lit-llama"
+        id: "litllama"
         run: echo ::set-output name=output::$(python src/lit_llama/generate_review.py)
         
       # - name: Run Python script
@@ -60,6 +60,6 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message: |
-              ${{ steps.lit-llama.outputs.output }}
+              ${{ steps.litllama.outputs.output }}
           repo-directory: './'
           requirements-path: 'requirements.txt'
