@@ -57,10 +57,6 @@ def main(
         pretrained_path = Path(f"./checkpoints/lit-llama/7B/llama-gptq.4bit.pth")
     if not tokenizer_path:
         tokenizer_path = Path("./checkpoints/lit-llama/tokenizer.model")
-    
-    assert adapter_path.is_file()
-    assert pretrained_path.is_file()
-    assert tokenizer_path.is_file()
 
     # Get the path of the GitHub workspace
     github_workspace_path = os.getenv("GITHUB_WORKSPACE")
