@@ -42,14 +42,19 @@ jobs:
       - name: installations
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Run Python script
-        run: python src/commenter.py
-      - name: Read PR comment from file
-        run: cat src/files/output.txt > pr_comment.txt
+          pip install -r requirements-lit-llama.txt
+      - name: Run lit-llama script
+        id: "lit-llama"
+        run: echo ::set-output name=output::$(python src/lit_llama/generate_review.py)
+        
+      # - name: Run Python script
+      #   run: python src/commenter.py
+      # - name: Read PR comment from file
+      #   run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
-          message-path: pr_comment.txt
+          message: |
+              ${{ steps.lit-llama.outputs.output }}
           repo-directory: './'
           requirements-path: 'requirements.txt'
