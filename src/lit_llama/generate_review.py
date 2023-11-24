@@ -130,8 +130,6 @@ def main(
 
     t = time.time() - t0
     # Write the comment to the output file
-    # with open("src/files/output.txt", "a") as f:
-    #   f.write(f"{output}")
 
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total, {len(test_data) / t:.02f} entries/sec")
     if fabric.device.type == "cuda":
@@ -148,3 +146,5 @@ if __name__ == "__main__":
         message="ComplexHalf support is experimental and many operators don't support it yet"
     )
     CLI(main)
+     with open("src/files/output.txt", "a") as f:
+       f.write(f"{output}")
