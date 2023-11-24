@@ -26,9 +26,9 @@ github_workspace_path = os.getenv("GITHUB_WORKSPACE")
 with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
     diff = diff_handle.read()
 
-prompt = ("""you are a code review assistant. Concisely summarize the major code difference in ONE LINE, explaining the difference in a way humans can understand. do it in the format:
+prompt = ("""you are a code review assistant. Concisely summarize the major code difference in ONE LINE, explaining what happens in the absence of subtracted code, and the addition of the new code, if any. do it in the format:
 
-CHANGE: Explanation.
+CHANGE (name of the change): Explanation (effect of the change).
 
 Here is the code difference: """ + diff)
 prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully. 
