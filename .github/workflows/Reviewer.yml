@@ -42,7 +42,7 @@ jobs:
       - name: installations
         run: |
           pip install --upgrade pip
-          pip install -r src/lit_llamarequirements-lit-llama.txt
+          pip install -r src/lit_llama/requirements-lit-llama.txt
       - name: Run lit-llama script
         id: "lit-llama"
         run: echo ::set-output name=output::$(python src/lit_llama/generate_review.py)
