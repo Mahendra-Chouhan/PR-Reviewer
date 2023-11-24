@@ -50,7 +50,9 @@ jobs:
           pip install -r requirements-lit-llama.txt
       - name: Run lit-llama script
         id: "litllama"
-        run: echo ::set-output name=output::$(python src/lit_llama/generate_review.py)
+        run: |
+          cd src/lit_llama
+          echo ::set-output name=output::$(python generate_review.py)
         
       # - name: Run Python script
       #   run: python src/commenter.py

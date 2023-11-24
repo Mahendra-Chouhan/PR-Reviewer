@@ -1,4 +1,5 @@
 import sys
+import os
 import time
 import warnings
 from pathlib import Path
@@ -75,7 +76,10 @@ def main(
 
     fabric = L.Fabric(devices=1)
     dtype = torch.bfloat16 if fabric.device.type == "cuda" and torch.cuda.is_bf16_supported() else torch.float32
-
+    
+    fabric.print("Instuction: " + sample["instruction"])
+    fabric.print("Input: " + sample["input"])
+    
     print("Loading model ...", file=sys.stderr)
     t0 = time.time()
     pretrained_checkpoint = lazy_load(pretrained_path)

@@ -1,3 +1,4 @@
+nltk
 torch>=2.0.0
 lightning
 sentencepiece
