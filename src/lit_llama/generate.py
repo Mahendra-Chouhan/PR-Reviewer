@@ -46,12 +46,12 @@ def generate(
         max_seq_length = min(T_new, model.config.block_size)
 
     device, dtype = idx.device, idx.dtype
-    print(f"device: {device}, dtype: {dtype} ")
+    # print(f"device: {device}, dtype: {dtype} ")
     # create an empty tensor of the expected final shape and fill in the current tokens
-    empty = torch.zeros(T_new, dtype=dtype, device=device)
+    empty = torch.empty(T_new, dtype=dtype, device=device)
     empty[:T] = idx
     idx = empty
-    print(idx)
+    # print("Idx",idx)
     input_pos = torch.arange(0, T, device=device)
 
     if idx.device.type == "xla":
@@ -62,21 +62,20 @@ def generate(
     # generate max_new_tokens tokens
     for _ in range(max_new_tokens):
         x = idx.index_select(0, input_pos).view(1, -1)
-        print(x)
-        print(input_pos)
+        print("x:",x)
         # forward
         logits = model(x, max_seq_length, input_pos)
-        print(logits)
+        print("model output:", logits)
         logits = logits[0, -1] / temperature
-        print(logits)
+        print("temprature:",logits)
         # optionally crop the logits to only the top k options
         if top_k is not None:
             v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
             logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
 
-        print(logits)    
+        print("Top K:",logits)    
         probs = torch.nn.functional.softmax(logits, dim=-1)
-        print(probs)
+        print("Softmax:",probs)
         idx_next = torch.multinomial(probs, num_samples=1).to(dtype=dtype)
 
         # advance
