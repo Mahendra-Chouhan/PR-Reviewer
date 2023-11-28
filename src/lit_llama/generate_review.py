@@ -7,6 +7,7 @@ from typing import Optional
 
 import lightning as L
 import torch
+from torchinfo import summary
 import json, re
 
 from generate import generate
@@ -117,7 +118,7 @@ def main(
 
     model.eval()
     model = fabric.setup_module(model)
-    print(model)
+    print(summary(model))
     tokenizer = Tokenizer(tokenizer_path)
     tokenizer.pad_token = "[PAD]"
     tokenizer.padding_side = "left"
