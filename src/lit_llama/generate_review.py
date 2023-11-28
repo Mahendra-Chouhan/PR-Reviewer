@@ -92,7 +92,7 @@ def main(
     fabric = L.Fabric(devices=1, precision=precision)
     
     print("Instuction: " + sample["instruction"])
-    print("Input: " + sample["input"])
+    print("Input: " + sample["input"], end="/n")
     
     print("Loading model ...", file=sys.stderr)
     t0 = time.time()
@@ -118,7 +118,7 @@ def main(
 
     model.eval()
     model = fabric.setup_module(model)
-    print(summary(model))
+    print(summary(model), end="/n")
     tokenizer = Tokenizer(tokenizer_path)
     tokenizer.pad_token = "[PAD]"
     tokenizer.padding_side = "left"
@@ -130,7 +130,7 @@ def main(
     input_data = {"instruction": sample["instruction"], "input": sample["input"]}
     prompt = generate_prompt(input_data)
     encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device, max_length =2048)
-    print(f"encoded:{encoded}")
+    #print(f"encoded:{encoded}")
     output = generate(model, encoded, max_new_tokens, temperature=temperature, top_k=top_k)
 
     # output = generate(

@@ -3,6 +3,7 @@ import time
 import warnings
 from pathlib import Path
 from typing import Optional
+from tqdm import tqdm
 
 import lightning as L
 import torch
@@ -60,22 +61,22 @@ def generate(
         xm.mark_step()
 
     # generate max_new_tokens tokens
-    for _ in range(max_new_tokens):
+    for _ in tqdm(range(max_new_tokens)):
         x = idx.index_select(0, input_pos).view(1, -1)
-        print("x:",x)
+        # print("x:",x)
         # forward
         logits = model(x, max_seq_length, input_pos)
-        print("model output:", logits)
+        # print("model output:", logits)
         logits = logits[0, -1] / temperature
-        print("temprature:",logits)
+        # print("temprature:",logits)
         # optionally crop the logits to only the top k options
         if top_k is not None:
             v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
             logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
 
-        print("Top K:",logits)    
+        # print("Top K:",logits)    
         probs = torch.nn.functional.softmax(logits, dim=-1)
-        print("Softmax:",probs)
+        # print("Softmax:",probs)
         idx_next = torch.multinomial(probs, num_samples=1).to(dtype=dtype)
 
         # advance
