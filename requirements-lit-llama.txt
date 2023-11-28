@@ -5,6 +5,6 @@ sentencepiece
 tqdm  # convert_checkpoint.py
 numpy  # train.py dataset memmap
 jsonargparse[signatures]  # generate.py, convert_checkpoint.py CLI
-#bitsandbytes  # quantization.py
+bitsandbytes  # quantization.py
 datasets  # evaluate.py
 zstandard  # prepare_redpajama.py
