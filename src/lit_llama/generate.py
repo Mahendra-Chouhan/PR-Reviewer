@@ -64,6 +64,7 @@ def generate(
 
         # forward
         logits = model(x, max_seq_length, input_pos)
+        print(logits)
         logits = logits[0, -1] / temperature
         print(logits)
         # optionally crop the logits to only the top k options
