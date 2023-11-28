@@ -74,8 +74,8 @@ def main(
 
 
 
-    fabric = L.Fabric(devices=1)
-    dtype = torch.bfloat16 if fabric.device.type == "cuda" and torch.cuda.is_bf16_supported() else torch.float32
+    precision = "bf16-true" if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else "32-true"
+    fabric = L.Fabric(devices=1, precision=precision)
     
     print("Instuction: " + sample["instruction"])
     print("Input: " + sample["input"])
@@ -86,9 +86,7 @@ def main(
     adapter_checkpoint = lazy_load(adapter_path)
     name = "7B"#llama_model_lookup(pretrained_checkpoint)
 
-    with EmptyInitOnDevice(
-        device=fabric.device, dtype=dtype, quantization_mode=quantize
-    ):
+    with fabric.init_module(empty_init=True), quantization(mode=quantize):
         model = LLaMA.from_name(name)
 
     # 1. Load the pretrained weights
@@ -102,9 +100,8 @@ def main(
     model = fabric.setup_module(model)
 
     tokenizer = Tokenizer(tokenizer_path)
-    tokenizer.pad_token = tokenizer.bos_token
+    tokenizer.pad_token = "[PAD]"
     tokenizer.padding_side = "left"
-
 
     
     
@@ -123,7 +120,7 @@ def main(
         top_k=top_k,
         eos_id=tokenizer.eos_id
     )
-
+    model.reset_cache()
     output = tokenizer.decode(output)
     output = output.split("### Response:\n")[1].strip()
     
