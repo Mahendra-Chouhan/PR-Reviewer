@@ -65,12 +65,13 @@ def generate(
         # forward
         logits = model(x, max_seq_length, input_pos)
         logits = logits[0, -1] / temperature
-
+        print(logits)
         # optionally crop the logits to only the top k options
         if top_k is not None:
             v, _ = torch.topk(logits, min(top_k, logits.size(-1)))
             logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
 
+        print(logits)    
         probs = torch.nn.functional.softmax(logits, dim=-1)
         print(probs)
         idx_next = torch.multinomial(probs, num_samples=1).to(dtype=dtype)
