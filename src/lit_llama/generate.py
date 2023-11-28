@@ -40,7 +40,7 @@ def generate(
     empty = torch.empty(T_new, dtype=idx.dtype, device=idx.device)
     empty[:T] = idx
     idx = empty
-    model = model.bfloat16()
+    # model = model.bfloat16()
 
     # generate max_new_tokens tokens
     for t in range(T, T_new):

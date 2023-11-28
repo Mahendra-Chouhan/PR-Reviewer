@@ -102,6 +102,8 @@ def main(
     model = fabric.setup_module(model)
 
     tokenizer = Tokenizer(tokenizer_path)
+    tokenizer.pad_token = "[PAD]"
+    tokenizer.padding_side = "left"
 
     
     
