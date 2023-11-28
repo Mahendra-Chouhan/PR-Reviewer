@@ -100,7 +100,7 @@ def main(
     # print(pretrained_checkpoint, adapter_checkpoint)
     name = "7B"#llama_model_lookup(pretrained_checkpoint)
 
-    with fabric.init_module(empty_init=True), quantization(mode=quantize):
+    with fabric.init_module(empty_init=False), quantization(mode=quantize):
         model = LLaMA.from_name(name)
     
     with lazy_load(pretrained_path) as pretrained_checkpoint:
