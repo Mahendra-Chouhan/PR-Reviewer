@@ -80,7 +80,7 @@ def main(
     # Open and read the "difference_hunk.txt" file
     sample = {}
     sample["instruction"] = "Review the given diff hunk and provide a constructive code review comment."
-    with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
+    with open(f"difference_hunk.txt", "r") as diff_handle:
         diff = diff_handle.read()
     sample["input"] = f"The diff hunk is: {diff}"
 
@@ -125,7 +125,7 @@ def main(
     
     input_data = {"instruction": sample["instruction"], "input": sample["input"]}
     prompt = generate_prompt(input_data)
-    encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device, truncation=True, max_length =2048)
+    encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device, max_length =2048)
     output = generate(model, encoded, max_new_tokens, temperature=temperature, top_k=top_k)
 
     # output = generate(
