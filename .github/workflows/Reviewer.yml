@@ -1,26 +1,32 @@
 name: PR Reviewer
+
 on:
   pull_request:
 
-jobs:        
+jobs:
   Review:
     runs-on: ubuntu-latest
+
     env:
       PR_AUTHOR_GITHUB_ID: ${{ github.event.pull_request.user.login }}
+
     permissions:
       pull-requests: write
+
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Find Github id of PR AUTHOR
         run: |
           echo "PR author: ${PR_AUTHOR_GITHUB_ID}"
+
       - name: Checkout pull request HEAD
         id: checkout_pr_head
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+
       - name: print-diff
         shell: bash
         run: |
@@ -38,23 +44,28 @@ jobs:
 
           echo "difference hunk = "
           cat difference_hunk.txt
-          
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ${{ env.HOME }}/.cache/pip
           key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}-{{ fileset.modifiedTime('requirements.txt') }}
+
       - uses: actions/setup-python@v4
         with:
-            python-version: '3.10' 
+          python-version: '3.10'
+
       - name: installations
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run Python script
         run: python src/commenter.py
+
       - name: Read PR comment from file
         run: cat src/files/output.txt > pr_comment.txt
+
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
