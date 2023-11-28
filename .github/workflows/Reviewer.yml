@@ -4,7 +4,7 @@ on:
 
 jobs:        
   Review:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest      
     env:
       PR_AUTHOR_GITHUB_ID: ${{ github.event.pull_request.user.login }}
     permissions:
@@ -48,20 +48,15 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -r requirements-lit-llama.txt
-      - name: Run lit-llama script
+      - name: Run lit-llama Review
         id: "litllama"
         run: |
           cd src/lit_llama
-          echo ::set-output name=output::$(python generate_review.py --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/lit-llama-adapter-finetuned.pth)
+          python generate_review.py --max_new_tokens 50 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
         
-      # - name: Run Python script
-      #   run: python src/commenter.py
-      # - name: Read PR comment from file
-      #   run: cat src/files/output.txt > pr_comment.txt
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
         with:
-          message: |
-              ${{ steps.litllama.outputs.output }}
+          message-path: ${{ github.workspace }}/src/files/output.txt
           repo-directory: './'
           requirements-path: 'requirements.txt'

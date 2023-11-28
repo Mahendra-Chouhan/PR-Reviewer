@@ -23,7 +23,7 @@ def prepare(
     destination_path: Path = Path("data/alpaca"), 
     tokenizer_path: Path = Path("checkpoints/lit-llama/tokenizer.model"),
     test_split_size: int = 2000,
-    max_seq_length: int = 1024,
+    max_seq_length: int = 256,
     seed: int = 42,
     mask_inputs: bool = False,  # as in alpaca-lora
     data_file_name: str = DATA_FILE_NAME
@@ -83,9 +83,10 @@ def prepare_sample(example: dict, tokenizer: Tokenizer, max_length: int, mask_in
     - output: The response string
 
     This function processes this data to produce a prompt text and a label for
-    supervised training. The prompt text is formed as a single message including both
-    the instruction and the input. The label/target is the same message but with the
-    response attached.
+    supervised training. The input text is formed as a single message including all
+    the instruction, the input (optional) and the response.
+    The label/target is the same message but can optionally have the instruction + input text
+    masked out (mask_inputs=True).
 
     Finally, both the prompt and the label get tokenized. If desired, all tokens
     in the label that correspond to the original input prompt get masked out (default).
@@ -115,12 +116,12 @@ def generate_prompt(example):
         return (
             "Below is an instruction that describes a task, paired with an input that provides further context. "
             "Write a response that appropriately completes the request.\n\n"
-            f"### Instruction:\n{example['instruction']}\n\n### Input:\n{example['input']}\n\n### Response:\n"
+            f"### Instruction:\n{example['instruction']}\n\n### Input:\n{example['input']}\n\n### Response:"
         )
     return (
         "Below is an instruction that describes a task. "
         "Write a response that appropriately completes the request.\n\n"
-        f"### Instruction:\n{example['instruction']}\n\n### Response:\n"
+        f"### Instruction:\n{example['instruction']}\n\n### Response:"
     )
 
 

@@ -18,9 +18,17 @@
 </div>
 
 # ⚡ Lit-LLaMA ️
-Independent implementation of [LLaMA](<https://github.com/facebookresearch/llama>) that is fully open source under the **Apache 2.0 license.**
+Independent implementation of [LLaMA](<https://github.com/facebookresearch/llama>) pretraining, finetuning, and inference code that is fully open source under the **Apache 2.0 license.**
 
-This implementation builds on [nanoGPT](<https://github.com/karpathy/nanoGPT>). Weights are distributed by Meta under a [research-only license](https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md#model-details).
+This implementation builds on [nanoGPT](<https://github.com/karpathy/nanoGPT>).
+
+The open-source code in this repository works with the original LLaMA weights that are distributed by Meta under a [research-only license](https://github.com/facebookresearch/llama/blob/main/MODEL_CARD.md#model-details).
+
+## Looking for LLaMA 2?
+
+Meta AI has since released LLaMA 2. Additionally, new Apache 2.0 licensed weights are being released as part of the [Open LLaMA project](https://github.com/openlm-research/open_llama).
+
+To run LLaMA 2 weights, Open LLaMA weights, or Vicuna weights (among other LLaMA-like checkpoints), **check out the [Lit-GPT repository](https://github.com/Lightning-AI/lit-gpt)**.
 
 ## Why?
 
@@ -94,16 +102,22 @@ See `python generate.py --help` for more options.
 You can also use GPTQ-style int4 quantization, but this needs conversions of the weights first:
 
 ```bash
-python quantize.py --checkpoint_path lit-llama.pth --tokenizer_path tokenizer.model --output_path llama-7b-gptq.4bit.pth --dtype bfloat16  --quantize gptq.int4
+python quantize/gptq.py --output_path checkpoints/lit-llama/7B/llama-gptq.4bit.pth --dtype bfloat16 --quantize gptq.int4
 ```
 
-With the generated quantized checkpoint generation works as usual with `--quantize gptq.int4`, bringing GPU usage to about ~5GB. As only the weights of the Linear layers are quantized, it is useful to use `--dtype bfloat16` even with the quantization enabled.
+GPTQ-style int4 quantization brings GPU usage down to about ~5GB. As only the weights of the Linear layers are quantized, it is useful to also use `--dtype bfloat16` even with the quantization enabled.
+
+With the generated quantized checkpoint generation quantization then works as usual with `--quantize gptq.int4` and the newly generated checkpoint file:
+
+```bash
+python generate.py --quantize gptq.int4 --checkpoint_path checkpoints/lit-llama/7B/llama-gptq.4bit.pth
+```
 
 [Full guide for generating samples from the model](howto/inference.md).
 
 ## Finetune the model
 
-We provide a simple training scripts in `finetune_lora.py` and `finetune_adapter.py` that instruction-tunes a pretrained model on the [Alpaca](https://github.com/tatsu-lab/stanford_alpaca) dataset using the techniques of [LoRA](https://arxiv.org/abs/2106.09685) and [Adapter](https://arxiv.org/abs/2303.16199).
+We provide a simple training scripts in `finetune/lora.py` and `finetune/adapter.py` that instruction-tunes a pretrained model on the [Alpaca](https://github.com/tatsu-lab/stanford_alpaca) dataset using the techniques of [LoRA](https://arxiv.org/abs/2106.09685) and [Adapter](https://arxiv.org/abs/2303.16199).
 
 1. Download the data and generate a instruction tuning dataset:
 
@@ -114,15 +128,15 @@ We provide a simple training scripts in `finetune_lora.py` and `finetune_adapter
 2. Run the finetuning script
 
    ```bash
-   python finetune_lora.py
+   python finetune/lora.py
    ```
    or 
    ```bash
-   python finetune_adapter.py
+   python finetune/adapter.py
    ```
 
 It is expected that you have downloaded the pretrained weights as described above.
-The finetuning requires at least one GPU with ~24 GB memory (GTX 3090). Follow the instructions in the script to efficiently fit your GPU memory.
+The finetuning requires at least one GPU with ~24 GB memory (RTX 3090). Follow the instructions in the script to efficiently fit your GPU memory.
 Note: For some GPU models you might need to set `torch.backends.cuda.enable_flash_sdp(False)` (see comments at the top of the script).
 
 More details about each finetuning method and how you can apply it to your own data can be found in our technical how-to guides.
@@ -139,6 +153,15 @@ These technical tutorials illustrate how to run the finetuning code.
 Looking for conceptual tutorials and explanations? We have some additional articles below:
 
 - [Understanding Parameter-Efficient Finetuning of Large Language Models: From Prefix Tuning to LLaMA-Adapters](https://lightning.ai/pages/community/article/understanding-llama-adapters/)
+
+## Pre-training
+
+We provide a simple training script based on Fabric if you want to venture into pre-training on RedPajama, a reproduction of the original LLaMA dataset.
+Conversion scripts for our optimized streaming `PackedDataset` are included.
+
+Follow this guide to start pre-training on the RedPajama dataset:
+
+- [Pretrain on RedPajama](howto/train_redpajama.md)
 
 ## Get involved!
 
