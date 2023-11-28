@@ -15,6 +15,7 @@ from lit_llama.adapter import LLaMA
 from lit_llama.utils import EmptyInitOnDevice, lazy_load, llama_model_lookup, quantization
 from scripts.prepare_alpaca import generate_prompt
 from utils.smooth_bleu import bleu_fromstr
+from lit_llama.adapter_v2 import add_adapter_v2_parameters_to_linear_layers
 from tqdm import tqdm
 
 torch.set_float32_matmul_precision("high")
@@ -98,18 +99,20 @@ def main(
     # pretrained_checkpoint = lazy_load(pretrained_path)
     # adapter_checkpoint = lazy_load(adapter_path)
     # print(pretrained_checkpoint, adapter_checkpoint)
-    name = "7B"#llama_model_lookup(pretrained_checkpoint)
-
-    with fabric.init_module(empty_init=False), quantization(mode=quantize):
-        model = LLaMA.from_name(name)
     
-    with lazy_load(pretrained_path) as pretrained_checkpoint:
+    with lazy_load(pretrained_path) as pretrained_checkpoint, lazy_load(adapter_path) as adapter_checkpoint:
+        name = llama_model_lookup(pretrained_checkpoint)
+
+        with fabric.init_module(empty_init=True), quantization(mode=quantize):
+            model = LLaMA.from_name(name)
+            # add_adapter_v2_parameters_to_linear_layers(model)
+
         # 1. Load the pretrained weights
         model.load_state_dict(pretrained_checkpoint, strict=False)
-    with lazy_load(adapter_path) as adapter_checkpoint:
         # 2. Load the fine-tuned adapter weights
         model.load_state_dict(adapter_checkpoint, strict=False)
-
+    
+    
     print(f"Time to load model: {time.time() - t0:.02f} seconds.", file=sys.stderr)
 
     model.eval()
