@@ -1,7 +1,5 @@
-import glob
 import os
 import torch
-import re
 from huggingface_hub import hf_hub_download
 from llama_cpp import Llama
 
@@ -28,7 +26,8 @@ with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
 
 prompt = ("""you are a code review assistant. Concisely summarize the major code difference in ONE LINE, explaining the difference in a way humans can understand. do it in the format:
 
-CHANGE: Explanation.
+CHANGE1: Explanation
+CHANGE2 (if any) : Explanation
 
 Here is the code difference: """ + diff)
 prompt_template=f'''SYSTEM: You are a helpful, respectful and honest assistant. Always answer as helpfully. 
