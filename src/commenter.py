@@ -24,7 +24,7 @@ github_workspace_path = os.getenv("GITHUB_WORKSPACE")
 with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
     diff = diff_handle.read()
 
-prompt = ("""From the given pull-request difference, detect changes. Concisely summarize the major code differences as CHANGE1, CHANGE2 .... , each in ONE LINE, explaining the difference in a way humans can understand, as EXPLANATION, also in one line. Also critique the change. do it in the format:
+prompt = ("""From the given pull-request difference, detect changes. Keep in mind that these changes are not related to the entire codebase, and are purely differences. Ignore differences that are not related to the code. Concisely summarize the major code differences as CHANGE1, CHANGE2 .... , each in ONE LINE, explaining the difference in a way humans can understand, as EXPLANATION, also in one line. Also critique the change. do it in the format:
 
 CHANGE1 : Explanation
 Feedback:
