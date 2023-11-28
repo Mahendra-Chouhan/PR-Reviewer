@@ -125,7 +125,7 @@ def main(
     
     input_data = {"instruction": sample["instruction"], "input": sample["input"]}
     prompt = generate_prompt(input_data)
-    encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device, max_length =2048)
+    encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device, truncation=True, max_length =2048)
     output = generate(model, encoded, max_new_tokens, temperature=temperature, top_k=top_k)
 
     # output = generate(

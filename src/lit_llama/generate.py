@@ -71,6 +71,7 @@ def generate(
             logits = torch.where(logits < v[[-1]], -float("Inf"), logits)
 
         probs = torch.nn.functional.softmax(logits, dim=-1)
+        print(probs)
         idx_next = torch.multinomial(probs, num_samples=1).to(dtype=dtype)
 
         # advance
