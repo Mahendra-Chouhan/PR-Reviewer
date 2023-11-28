@@ -160,7 +160,7 @@ def main(
         fabric.print(f"Memory used are: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
     # Write the comment to the output file
     with open("src/files/output.txt", "a") as f:
-        f.write(f"{response}")
+        f.write(f"{output}")
     return output
 
 if __name__ == "__main__":
