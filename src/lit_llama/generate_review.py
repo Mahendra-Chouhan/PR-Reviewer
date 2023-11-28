@@ -70,7 +70,7 @@ def main(
     sample["instruction"] = "Review the given diff hunk and provide a constructive code review comment."
     with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
         diff = diff_handle.read()
-    sample["input"] = f"The diff hunk is: '{diff}'"
+    sample["input"] = f"The diff hunk is: {diff}"
 
 
 
