@@ -47,7 +47,7 @@ def generate(
 
     device, dtype = idx.device, idx.dtype
     # create an empty tensor of the expected final shape and fill in the current tokens
-    empty = torch.empty(T_new, dtype=dtype, device=device)
+    empty = torch.zeros(T_new, dtype=dtype, device=device)
     empty[:T] = idx
     idx = empty
     input_pos = torch.arange(0, T, device=device)

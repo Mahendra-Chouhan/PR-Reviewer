@@ -4,8 +4,7 @@ on:
 
 jobs:        
   Review:
-    runs-on: 
-      labels: ubuntu-20.04-16core
+    runs-on: ubuntu-latest      
     env:
       PR_AUTHOR_GITHUB_ID: ${{ github.event.pull_request.user.login }}
     permissions:
