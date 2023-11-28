@@ -26,10 +26,20 @@ jobs:
         run: |
           git fetch origin main
           git diff origin/main..HEAD > difference_hunk.txt
-          find . -type f -name difference_hunk.txt
-          pwd
-          echo "difference hunk = "
-          cat difference_hunk.txt
+
+          # Check for file deletions
+          deleted_files=$(git status | grep "deleted" | awk '{print $2}')
+
+          # Filter out deleted files from the diff output
+          if [ -n "$deleted_files" ]; then
+            grep -v "$deleted_files" difference_hunk.txt > filtered_diff.txt
+            mv filtered_diff.txt difference_hunk.txt
+          fi
+
+    find . -type f -name difference_hunk.txt
+    pwd
+    echo "difference hunk = "
+    cat difference_hunk.txt
           
       - name: Cache dependencies
         uses: actions/cache@v3
