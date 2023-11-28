@@ -17,6 +17,18 @@ from scripts.prepare_alpaca import generate_prompt
 from utils.smooth_bleu import bleu_fromstr
 from tqdm import tqdm
 
+torch.set_float32_matmul_precision("high")
+warnings.filterwarnings(
+    # Triggered internally at ../aten/src/ATen/EmptyTensor.cpp:31
+    "ignore", 
+    message="ComplexHalf support is experimental and many operators don't support it yet"
+)
+warnings.filterwarnings(
+    # Triggered in bitsandbytes/autograd/_functions.py:298
+    "ignore", 
+    message="MatMul8bitLt: inputs will be cast from torch.bfloat16 to float16 during quantization",
+)
+
 
 def main(
     prompt: str = "",
@@ -82,17 +94,21 @@ def main(
     
     print("Loading model ...", file=sys.stderr)
     t0 = time.time()
-    pretrained_checkpoint = lazy_load(pretrained_path)
-    adapter_checkpoint = lazy_load(adapter_path)
+
+    # pretrained_checkpoint = lazy_load(pretrained_path)
+    # adapter_checkpoint = lazy_load(adapter_path)
+    # print(pretrained_checkpoint, adapter_checkpoint)
     name = "7B"#llama_model_lookup(pretrained_checkpoint)
 
     with fabric.init_module(empty_init=True), quantization(mode=quantize):
         model = LLaMA.from_name(name)
-
-    # 1. Load the pretrained weights
-    model.load_state_dict(pretrained_checkpoint, strict=False)
-    # 2. Load the fine-tuned adapter weights
-    model.load_state_dict(adapter_checkpoint, strict=False)
+    
+    with lazy_load(pretrained_path) as pretrained_checkpoint:
+        # 1. Load the pretrained weights
+        model.load_state_dict(pretrained_checkpoint, strict=False)
+    with lazy_load(adapter_path) as adapter_checkpoint:
+        # 2. Load the fine-tuned adapter weights
+        model.load_state_dict(adapter_checkpoint, strict=False)
 
     print(f"Time to load model: {time.time() - t0:.02f} seconds.", file=sys.stderr)
 
@@ -109,17 +125,18 @@ def main(
     
     input_data = {"instruction": sample["instruction"], "input": sample["input"]}
     prompt = generate_prompt(input_data)
-    encoded = tokenizer.my_encode_for_generate(prompt, bos=True, eos=False, device=model.device, max_length=block_size-max_new_tokens)
+    encoded = tokenizer.encode(prompt, bos=True, eos=False, device=fabric.device)
+    output = generate(model, encoded, max_new_tokens, temperature=temperature, top_k=top_k)
 
-    output = generate(
-        model,
-        idx=encoded,
-        max_seq_length=block_size,
-        max_new_tokens=max_new_tokens,
-        temperature=temperature,
-        top_k=top_k,
-        eos_id=tokenizer.eos_id
-    )
+    # output = generate(
+    #     model,
+    #     idx=encoded,
+    #     max_seq_length=block_size,
+    #     max_new_tokens=max_new_tokens,
+    #     temperature=temperature,
+    #     top_k=top_k,
+    #     eos_id=tokenizer.eos_id
+    # )
     model.reset_cache()
     output = tokenizer.decode(output)
     output = output.split("### Response:\n")[1].strip()
