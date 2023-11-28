@@ -61,7 +61,8 @@ def generate(
     # generate max_new_tokens tokens
     for _ in range(max_new_tokens):
         x = idx.index_select(0, input_pos).view(1, -1)
-
+        print(x)
+        print(input_pos)
         # forward
         logits = model(x, max_seq_length, input_pos)
         print(logits)
