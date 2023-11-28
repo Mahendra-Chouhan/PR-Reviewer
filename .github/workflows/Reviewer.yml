@@ -4,7 +4,7 @@ on:
 
 jobs:        
   Review:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest-xlarge
     env:
       PR_AUTHOR_GITHUB_ID: ${{ github.event.pull_request.user.login }}
     permissions:
