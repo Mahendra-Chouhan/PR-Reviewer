@@ -33,7 +33,7 @@ jobs:
           git fetch origin main
           git diff origin/main..HEAD > difference_hunk.txt
 
-          # Check for file deletions
+          # Check for file deletions due to lack of tokens
           deleted_files=$(git status | grep "deleted" | awk '{print $2}')
 
           # Filter out deleted files from the diff output
