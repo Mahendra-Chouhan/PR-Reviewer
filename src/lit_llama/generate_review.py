@@ -158,6 +158,9 @@ def main(
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total")
     if fabric.device.type == "cuda":
         fabric.print(f"Memory used are: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
+    # Write the comment to the output file
+    with open("src/files/output.txt", "a") as f:
+        f.write(f"{response}")
     return output
 
 if __name__ == "__main__":
