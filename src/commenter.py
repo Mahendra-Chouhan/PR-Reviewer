@@ -26,10 +26,10 @@ with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
 
 prompt = ("""you are a code review assistant. Concisely summarize the major code differences, each in ONE LINE, explaining the difference in a way humans can understand. do it in the format:
 
-CHANGE(s): Explanation
+CHANGE : Explanation
 
 Here is the code difference: """ + diff)
-prompt_template=f'''SYSTEM: You are a helpful code reviewer.
+prompt_template=f'''SYSTEM: You are a helpful code reviewer. Always answer helpfully.
 
 USER: {prompt}
 
