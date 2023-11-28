@@ -36,10 +36,8 @@ jobs:
             mv filtered_diff.txt difference_hunk.txt
           fi
 
-    find . -type f -name difference_hunk.txt
-    pwd
-    echo "difference hunk = "
-    cat difference_hunk.txt
+          echo "difference hunk = "
+          cat difference_hunk.txt
           
       - name: Cache dependencies
         uses: actions/cache@v3
