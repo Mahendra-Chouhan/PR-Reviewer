@@ -1,3 +1,5 @@
+import collections
+import contextlib
 import gc
 import json
 import shutil
@@ -11,14 +13,14 @@ wd = Path(__file__).parent.parent.resolve()
 sys.path.append(str(wd))
 
 from lit_llama.model import LLaMA, LLaMAConfig
-from lit_llama.utils import EmptyInitOnDevice
+from lit_llama.utils import EmptyInitOnDevice, lazy_load, incremental_save
 
 
 @torch.no_grad()
 def convert_hf_checkpoint(
     *,
-    output_dir: Path = Path("checkpoints/lit-llama"),
-    ckpt_dir: Path = Path("checkpoints/hf-llama/"),
+    output_dir: Path = Path("checkpoints/lit-llama/7B"),
+    checkpoint_dir: Path = Path("checkpoints/hf-llama/7B"),
     model_size: str = "7B",
     dtype: str = "float32",
     verify: bool = False,
@@ -26,12 +28,10 @@ def convert_hf_checkpoint(
     """
     Perform the reverse operation of: https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/convert_llama_weights_to_hf.py
     """
-    output_dir = output_dir / model_size
-    ckpt_dir = ckpt_dir / model_size
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # the tokenizer is the same for all model sizes, so we store it in the parent dir
-    shutil.copy(ckpt_dir / "tokenizer.model", output_dir.parent)
+    shutil.copy(checkpoint_dir / "tokenizer.model", output_dir.parent)
 
     dt = getattr(torch, dtype, None)
     if not isinstance(dt, torch.dtype):
@@ -41,23 +41,26 @@ def convert_hf_checkpoint(
     print("Initializing lit-llama")
     config = LLaMAConfig.from_name(model_size)
 
-    with EmptyInitOnDevice(device="cpu", dtype=dtype):
+    with EmptyInitOnDevice(device="meta", dtype=dtype):
         model = LLaMA(config)
 
     qkv_size = model.transformer.h[0].attn.c_attn.weight.shape[0] // 3
 
     # initialize a new empty state dict to hold our new weights
-    sd = model.state_dict()
+    sd_meta = model.state_dict()
+    sd = {}
 
     # Load the json file containing weight mapping
-    pytorch_bin_map_json_path = ckpt_dir / "pytorch_model.bin.index.json"
+    pytorch_bin_map_json_path = checkpoint_dir / "pytorch_model.bin.index.json"
     with open(pytorch_bin_map_json_path) as json_map:
         bin_index = json.load(json_map)
-
-    bin_files = set(el for el in bin_index["weight_map"].values())
+    bin_files = set(checkpoint_dir / bin for bin in bin_index["weight_map"].values())
+    if not bin_files:
+        raise ValueError(f"Expected {str(checkpoint_dir)!r} to contain .bin files")
 
     def permute(w):
         dim = config.n_embd
+        w = w._load_tensor().to(dtype)
         return (
             w.view(config.n_head, 2, dim // config.n_head // 2, dim)
             .transpose(1, 2)
@@ -76,40 +79,65 @@ def convert_hf_checkpoint(
         "post_attention_layernorm.weight": "rms_2.scale",
         "model.embed_tokens.weight": "transformer.wte.weight",
         "model.norm.weight": "transformer.ln_f.scale",
-        "lm_head.weight": "lm_head.weight"
+        "lm_head.weight": "lm_head.weight",
     }
 
-    for bin_file in bin_files:
-        print("Processing", bin_file)
-
-        hf_weights = torch.load(ckpt_dir / bin_file, map_location="cpu")
-
-        for name, param in hf_weights.items():
-            param = param.to(dtype=dtype)
-            if "rotary_emb.inv_freq" in name:
-                continue
-            if "model.layers" in name:
-                block_id = int(name.split(".")[2])
-                from_name = ".".join(name.split(".")[3:])
-                to_name = weight_map[from_name]
-
-                if "q_proj" in name:
-                    sd[f"transformer.h.{block_id}.{to_name}"][:qkv_size] = permute(param)
-                elif "k_proj" in name:
-                    sd[f"transformer.h.{block_id}.{to_name}"][qkv_size:-qkv_size] = permute(param)
-                elif "v_proj" in name:
-                    sd[f"transformer.h.{block_id}.{to_name}"][-qkv_size:] = param
-                else:
-                    sd[f"transformer.h.{block_id}.{to_name}"].copy_(param)
-            else:
-                sd[weight_map[name]].copy_(param)
-
-        del hf_weights
-        gc.collect()
-
     print(f"Saving to disk at {output_dir}")
-    torch.save(model.state_dict(), output_dir / "lit-llama.pth")
+    unprocessed_weights = collections.defaultdict(dict)
 
+    with incremental_save(output_dir / "lit-llama.pth") as saver:
+        # for checkpoints that split the QKV across several files, we need to keep all the bin files
+        # open, so we use `ExitStack` to close them all together at the end
+        with contextlib.ExitStack() as stack:
+            for bin_file in bin_files:
+                print("Processing", bin_file)
+                hf_weights = stack.enter_context(lazy_load(bin_file))
+                for name, param in hf_weights.items():
+                    skip = False
+                    if "rotary_emb.inv_freq" in name:
+                        continue
+                    if "model.layers" in name:
+                        block_id = int(name.split(".")[2])
+                        from_name = ".".join(name.split(".")[3:])
+                        to_name = weight_map[from_name]
+                        sd_key = f"transformer.h.{block_id}.{to_name}"
+
+                        if "q_proj" in name:
+                            unprocessed_weights[sd_key]["q_proj"] = param
+                            skip = True
+                        elif "k_proj" in name:
+                            unprocessed_weights[sd_key]["k_proj"] = param
+                            skip = True
+                        elif "v_proj" in name:
+                            unprocessed_weights[sd_key]["v_proj"] = param
+                            skip = True
+                        if skip and len(unprocessed_weights[sd_key]) == 3:
+                            w = torch.empty(
+                                sd_meta[sd_key].shape, dtype=sd_meta[sd_key].dtype
+                            )
+                            w[:qkv_size] = permute(unprocessed_weights[sd_key]["q_proj"])
+                            w[qkv_size:-qkv_size] = permute(
+                                unprocessed_weights[sd_key]["k_proj"]
+                            )
+                            w[-qkv_size:] = (
+                                unprocessed_weights[sd_key]["v_proj"]
+                                ._load_tensor()
+                                .to(dtype)
+                            )
+                            sd[sd_key] = w
+                            del unprocessed_weights[sd_key]
+                            skip = False
+                        else:
+                            sd[sd_key] = param._load_tensor().to(dtype)
+                    else:
+                        sd_key = weight_map[name]
+                        sd[sd_key] = param._load_tensor().to(dtype)
+                    if not skip:
+                        sd[sd_key] = saver.store_early(sd[sd_key])
+                gc.collect()
+        saver.save(sd)
+
+    assert len(unprocessed_weights) == 0, f"unexpected partial weights {list(unprocessed_weights)}"
     if verify:
         try:
             from transformers import LlamaForCausalLM
@@ -123,7 +151,7 @@ def convert_hf_checkpoint(
         gc.collect()
 
         print("Loading original model for comparison")
-        model_hf = LlamaForCausalLM.from_pretrained(ckpt_dir)
+        model_hf = LlamaForCausalLM.from_pretrained(checkpoint_dir)
         out_hf = model_hf(token_sample)["logits"]
 
         print("Comparing outputs")
