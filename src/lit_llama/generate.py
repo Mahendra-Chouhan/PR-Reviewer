@@ -51,6 +51,7 @@ def generate(
     empty = torch.zeros(T_new, dtype=dtype, device=device)
     empty[:T] = idx
     idx = empty
+    print(idx)
     input_pos = torch.arange(0, T, device=device)
 
     if idx.device.type == "xla":
