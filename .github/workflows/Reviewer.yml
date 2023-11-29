@@ -26,23 +26,27 @@ jobs:
         id: git-diff-action
         with:
           json_diff_file_output: diff.json
-          raw_diff_file_output: difference_hunk.txt
+          raw_diff_file_output: ${{ github.workspace }}/difference_hunk.txt
           file_output_only: "true"
 
       - name: download llm file
         id: "litllamadownload"
-        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth?download=true -P ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
+        run: wget https://huggingface.co/msinghC/llm-pr-review/resolve/main/llama-gptq.4bit.pth -P ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B
 
 
       - name: Cache dependencies
+        id: cache-python
         uses: actions/cache@v3
         with:
-          path: ${{ env.HOME }}/.cache/pip
-          key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}-{{ fileset.modifiedTime('requirements.txt') }}
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-lit-llama.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
       - uses: actions/setup-python@v4
         with:
             python-version: '3.10' 
-      - name: installations
+      - if: ${{ steps.cache-python.outputs.cache-hit != 'true' }}
+        name: installations
         run: |
           pip install --upgrade pip
           pip install -r requirements-lit-llama.txt
@@ -50,7 +54,7 @@ jobs:
         id: "litllama"
         run: |
           cd src/lit_llama
-          python generate_review.py --max_new_tokens 50 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
+          python generate_review.py --max_new_tokens 50 --input_path ${{ github.workspace }}/difference_hunk.txt -- output_path ${{ github.workspace }}/src/files/output.txt --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth
         
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2

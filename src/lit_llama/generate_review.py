@@ -43,7 +43,7 @@ def main(
     max_new_tokens: int = 512,
     top_k: int = 1,
     temperature: float = 1,
-    test_data_path: Optional[Path] = None,
+    input_path: Optional[Path] = None,
     output_path: Optional[Path] = None,
 ) -> None:
     """Generates a response based on a given instruction and an optional input.
@@ -82,7 +82,7 @@ def main(
     # Open and read the "difference_hunk.txt" file
     sample = {}
     sample["instruction"] = "Review the given diff hunk and provide a constructive code review comment."
-    with open(f"{github_workspace_path}/difference_hunk.txt", "r") as diff_handle:
+    with open(input_path, "r") as diff_handle:
         diff = diff_handle.read()
     sample["input"] = f"The diff hunk is: {diff}"
 
@@ -122,8 +122,6 @@ def main(
     tokenizer = Tokenizer(tokenizer_path)
     tokenizer.pad_token = "[PAD]"
     tokenizer.padding_side = "left"
-
-    
     
     t0 = time.time()
     
@@ -151,15 +149,12 @@ def main(
     print("Respond: " + output)
 
     t = time.time() - t0
-    # Write the comment to the output file
-    # with open("src/files/output.txt", "a") as f:
-    #   f.write(f"{output}")
-
+    output = f"## AI Code Review \n {output} "
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total")
     if fabric.device.type == "cuda":
         fabric.print(f"Memory used are: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
     # Write the comment to the output file
-    with open(f"{github_workspace_path}/src/files/output.txt", "a") as f:
+    with open(output_path, "a") as f:
         f.write(f"{output}")
     return output
 
