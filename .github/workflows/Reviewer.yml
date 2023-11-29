@@ -50,7 +50,7 @@ jobs:
         id: "litllama"
         run: |
           cd src/lit_llama
-          python generate_review.py --max_new_tokens 10 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
+          python generate_review.py --max_new_tokens 50 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
         
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
