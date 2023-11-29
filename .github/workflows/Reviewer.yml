@@ -21,15 +21,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: print-diff
-        shell: bash
-        run: |
-          git fetch origin main
-          git diff origin/main..HEAD > difference_hunk.txt
-          find . -type f -name difference_hunk.txt
-          pwd
-          echo "difference hunk = "
-          cat difference_hunk.txt
+      # Check the PR diff using the current branch and the base branch of the PR
+      - uses: GrantBirki/git-diff-action@vX.X.X
+        id: git-diff-action
+        with:
+          json_diff_file_output: diff.json
+          raw_diff_file_output: difference_hunk.txt
+          file_output_only: "true"
 
       - name: download llm file
         id: "litllamadownload"
@@ -52,7 +50,7 @@ jobs:
         id: "litllama"
         run: |
           cd src/lit_llama
-          python generate_review.py --max_new_tokens 50 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
+          python generate_review.py --max_new_tokens 10 --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth?download=true
         
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
