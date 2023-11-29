@@ -54,7 +54,7 @@ jobs:
         id: "litllama"
         run: |
           cd src/lit_llama
-          python generate_review.py --max_new_tokens 50 --input_path ${{ github.workspace }}/difference_hunk.txt -- output_path ${{ github.workspace }}/src/files/output.txt --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth
+          python generate_review.py --max_new_tokens 50 --input_path ${{ github.workspace }}/difference_hunk.txt --output_path ${{ github.workspace }}/src/files/output.txt --temperature 0.8 --top_k 1 --pretrained_path ${{ github.workspace }}/src/lit_llama/checkpoints/lit-llama/7B/llama-gptq.4bit.pth
         
       - name: Add PR comment
         uses: mshick/add-pr-comment@v2
