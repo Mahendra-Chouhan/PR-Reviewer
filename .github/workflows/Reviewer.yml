@@ -22,7 +22,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       # Check the PR diff using the current branch and the base branch of the PR
-      - uses: GrantBirki/git-diff-action@vX.X.X
+      - uses: GrantBirki/git-diff-action@v2.3.0
         id: git-diff-action
         with:
           json_diff_file_output: diff.json
