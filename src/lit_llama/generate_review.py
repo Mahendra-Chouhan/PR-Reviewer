@@ -142,7 +142,7 @@ def main(
     # )
     model.reset_cache()
     output = tokenizer.decode(output)
-    print("complete response:" output)
+    print("complete response:", output)
     output = output.split("### Response:\n")[1].strip() if len(output.split("### Response:\n")) > 1 else "" 
     
     print("Instuction: " + sample["instruction"])
