@@ -60,5 +60,3 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message-path: ${{ github.workspace }}/src/files/output.txt
-          repo-directory: './'
-          requirements-path: 'requirements.txt'

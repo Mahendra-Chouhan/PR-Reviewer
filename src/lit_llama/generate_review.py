@@ -142,14 +142,15 @@ def main(
     # )
     model.reset_cache()
     output = tokenizer.decode(output)
-    output = output.split("### Response:\n")[1].strip()
+    print("complete response:" output)
+    output = output.split("### Response:\n")[1].strip() if len(output.split("### Response:\n")) > 1 else "" 
     
     print("Instuction: " + sample["instruction"])
     print("Input: " + sample["input"])
     print("Respond: " + output)
 
     t = time.time() - t0
-    output = f"## AI Code Review \n {output} "
+    output = f"### AI Pull Request Review: \n {output} "
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total")
     if fabric.device.type == "cuda":
         fabric.print(f"Memory used are: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
