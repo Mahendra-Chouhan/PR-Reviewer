@@ -11,9 +11,6 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Update Conda
-        run: conda update -n base -c defaults conda
-
       - name: Checkout pull request HEAD
         id: checkout_pr_head
         uses: actions/checkout@v2
@@ -31,26 +28,12 @@ jobs:
           echo "difference hunk = "
           cat difference_hunk.txt
 
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          auto-update-conda: true
-          miniconda-version: latest
-          conda-channels: conda-forge,pytorch
-      
-      - name: Create and activate conda environment
+      - name: Install Python dependencies
         run: |
-          conda create -n myenv python=3.8
-          source activate myenv
-      
-      - name: Install dependencies
-        run: |
-          conda install -c conda-forge nltk
-          conda install -c pytorch torchvision torchaudio cudatoolkit=10.2
-          conda install -c conda-forge transformers
-
-# Continue with the rest of your workflow
-
+          python -m pip install --upgrade pip
+          pip install nltk
+          pip install torch torchvision torchaudio==0.9.0+cu102 -f https://download.pytorch.org/whl/torch_stable.html
+          pip install transformers
 
       - name: Run Python script
         run: python src/commenter.py
