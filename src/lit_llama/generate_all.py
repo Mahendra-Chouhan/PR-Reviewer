@@ -43,8 +43,8 @@ def main(
             samples.
     """
     output = {}
-    output["Qualit"] = generate_quality(pretrained_path=pretrained_path,input_path=input_path, output_path=output_path,
-                                        max_new_tokens=max_new_tokens)
+    # output["Qualit"] = generate_quality(pretrained_path=pretrained_path,input_path=input_path, output_path=output_path,
+    #                                     max_new_tokens=max_new_tokens)
     output["Review"] = generate_review(pretrained_path=pretrained_path, input_path=input_path, output_path=output_path,
                                        max_new_tokens=max_new_tokens)
     output["Refinement"] = generate_refinement(pretrained_path= pretrained_path, input_path=input_path, output_path=output_path,
