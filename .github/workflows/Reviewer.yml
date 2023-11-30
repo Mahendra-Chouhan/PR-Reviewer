@@ -11,18 +11,27 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Checkout pull request HEAD
+      - name: Checkout pull request base
+        id: checkout_pr_base
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+
+      - name: Checkout pull request head
         id: checkout_pr_head
         uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
+      - name: Fetch test-CodeBERT branch
+        run: git fetch origin test-CodeBERT:test-CodeBERT
+
       - name: print-diff
         shell: bash
         run: |
-          git fetch origin test-CodeBERT
-          git diff origin/test-CodeBERT.HEAD > difference_hunk.txt
+          git diff test-CodeBERT > difference_hunk.txt
           find . -type f -name difference_hunk.txt
           pwd
           echo "difference hunk = "
