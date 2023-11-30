@@ -52,10 +52,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          conda activate base
-          conda install nltk
-          conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
-          conda install transformers
+          conda run -n base conda install nltk
+          conda run -n base conda install torch torchvision torchaudio cudatoolkit=10.2 -c torch
+          conda run -n base conda install transformers
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
