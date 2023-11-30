@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Optional
 
 from generate_review import main as generate_review
-from generate_qaulity import main as generate_qaulity
+from generate_quality import main as generate_quality
 from generate_refinement import main as generate_refinement
 
 def main(
@@ -43,7 +43,7 @@ def main(
             samples.
     """
     output = {}
-    output["Qualit"] = generate_qaulity(pretrained_path=pretrained_path,input_path=input_path, output_path=output_path,
+    output["Qualit"] = generate_quality(pretrained_path=pretrained_path,input_path=input_path, output_path=output_path,
                                         max_new_tokens=max_new_tokens)
     output["Review"] = generate_review(pretrained_path=pretrained_path, input_path=input_path, output_path=output_path,
                                        max_new_tokens=max_new_tokens)
