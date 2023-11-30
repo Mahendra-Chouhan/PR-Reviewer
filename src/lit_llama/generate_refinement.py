@@ -151,12 +151,13 @@ def main(
     print("Respond: " + output)
 
     t = time.time() - t0
-    output = f"### AI Pull Request Review: \n {output} "
+    
     fabric.print(f"\n\nTime for inference: {t:.02f} sec total")
     if fabric.device.type == "cuda":
         fabric.print(f"Memory used are: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
     # Write the comment to the output file
     with open(output_path, "a") as f:
+        output = f"### AI Pull Request Review: \n {output} "
         f.write(f"{output}")
     return output
 

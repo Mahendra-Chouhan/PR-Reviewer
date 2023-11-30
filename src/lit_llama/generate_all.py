@@ -51,6 +51,15 @@ def main(
                                                max_new_tokens=max_new_tokens, 
                                                review=output["Review"])
     
+    with open(output_path, "w") as f:
+        output = f"""##### AI Code review
+        **Review** : {output["Review"]}
+        **Refined code**: 
+        ```
+            {output["Refinement"]}
+        ```
+        """
+        f.write(f"{output}")
     return output
 
 if __name__ == "__main__":
