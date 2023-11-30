@@ -1,4 +1,4 @@
-from transformers import AutoTokenizer
+from transformers import *
 tokenizer = AutoTokenizer.from_pretrained("bert-base-multilingual-cased")
 
 #Get the values for input_ids, token_type_ids, attention_mask
