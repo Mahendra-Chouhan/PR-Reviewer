@@ -14,14 +14,13 @@ model = RobertaModel.from_pretrained("microsoft/codebert-base")
 tokenizer = RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 model.to(device)
 
-#tokenize the code
-tokens = tokenizer.encode(diff, return_tensors = "pt")
+# Tokenize the code
+tokens = tokenizer.encode(diff, return_tensors="pt", max_length=2000, truncation=True)
 
-#Run CodeBERT on the tokenized code
+# Run CodeBERT on the tokenized code
 with torch.no_grad():
     response = model(tokens) 
 
-
 # Write the comment to the output file
 with open("src/files/output.txt", "a") as f:
-  f.write(f"{response}")
+    f.write(f"{response}")
