@@ -33,6 +33,7 @@ jobs:
           
       - name: Cache dependencies
         uses: actions/cache@v3
+  
         with:
           path: ${{ env.HOME }}/.cache/pip
           key: ${{ runner.os }}-dependencies-${{ hashFiles('requirements.txt') }}-{{ fileset.modifiedTime('requirements.txt') }}
@@ -42,7 +43,19 @@ jobs:
       - name: installations
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          miniconda-version: latest
+          conda-channels: conda-forge,pytorch
+
+      - name: Install dependencies
+        run: |
+          conda activate base
+          conda install nltk
+          conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+          conda install transformers
       - name: Run Python script
         run: python src/commenter.py
       - name: Read PR comment from file
