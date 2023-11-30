@@ -34,7 +34,7 @@ warnings.filterwarnings(
 
 def main(
     prompt: str = "",
-    input: str = "Review the given diff hunk and provide a constructive code review comment.",
+    input: str = "Determine whether the provided diff hunk requires a code review. Respond with either 'yes' or 'no'.",
     adapter_path: Optional[Path] = None,
     pretrained_path: Optional[Path] = None,
     tokenizer_path: Optional[Path] = None,
@@ -66,7 +66,7 @@ def main(
             samples.
     """
     if not adapter_path:
-        adapter_path = Path("checkpoints/lit-llama/7B/comment_generation/lit-llama-adapter-finetuned.pth")
+        adapter_path = Path("checkpoints/lit-llama/7B/quality_estimation/lit-llama-adapter-finetuned.pth")
     if not pretrained_path:
         pretrained_path = Path(f"./checkpoints/lit-llama/7B/llama-gptq.4bit.pth")
     if not tokenizer_path:
@@ -84,7 +84,7 @@ def main(
     sample["instruction"] = input
     with open(input_path, "r") as diff_handle:
         diff = diff_handle.read()
-    sample["input"] = f"The diff hunk is: {diff}"
+    sample["input"] = f"The diff hunk is: '{diff}'"
 
 
 

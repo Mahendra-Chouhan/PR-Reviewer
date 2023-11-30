@@ -34,7 +34,7 @@ warnings.filterwarnings(
 
 def main(
     prompt: str = "",
-    input: str = "Review the given diff hunk and provide a constructive code review comment.",
+    input: str = "Refine the given code based on the provided code review comment.",
     adapter_path: Optional[Path] = None,
     pretrained_path: Optional[Path] = None,
     tokenizer_path: Optional[Path] = None,
@@ -45,6 +45,7 @@ def main(
     temperature: float = 1,
     input_path: Optional[Path] = None,
     output_path: Optional[Path] = None,
+    review: str= ""
 ) -> None:
     """Generates a response based on a given instruction and an optional input.
     This script will only work with checkpoints from the instruction-tuned LLaMA-Adapter model.
@@ -66,7 +67,7 @@ def main(
             samples.
     """
     if not adapter_path:
-        adapter_path = Path("checkpoints/lit-llama/7B/comment_generation/lit-llama-adapter-finetuned.pth")
+        adapter_path = Path("checkpoints/lit-llama/7B/code_refinement/lit-llama-adapter-finetuned.pth")
     if not pretrained_path:
         pretrained_path = Path(f"./checkpoints/lit-llama/7B/llama-gptq.4bit.pth")
     if not tokenizer_path:
@@ -84,7 +85,7 @@ def main(
     sample["instruction"] = input
     with open(input_path, "r") as diff_handle:
         diff = diff_handle.read()
-    sample["input"] = f"The diff hunk is: {diff}"
+    sample["input"] = f"The comment is: '{review}' \n The code is:: '{diff}'"
 
 
 
