@@ -37,7 +37,7 @@ jobs:
           auto-update-conda: true
           miniconda-version: latest
           conda-channels: conda-forge,pytorch
-
+      
       - name: Create and activate conda environment
         run: |
           conda create -n myenv python=3.8
