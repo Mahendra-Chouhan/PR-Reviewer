@@ -38,12 +38,19 @@ jobs:
           miniconda-version: latest
           conda-channels: conda-forge,pytorch
 
+      - name: Create and activate conda environment
+        run: |
+          conda create -n myenv python=3.8
+          source activate myenv
+      
       - name: Install dependencies
         run: |
-          conda activate base
           conda install -c conda-forge nltk
           conda install -c pytorch torchvision torchaudio cudatoolkit=10.2
           conda install -c conda-forge transformers
+
+# Continue with the rest of your workflow
+
 
       - name: Run Python script
         run: python src/commenter.py
