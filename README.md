@@ -1,5 +1,5 @@
-# PR-Reviewer 🕵🏼
-
+# Commit-critiq 🕵🏼
+![PR Reviewer](images/Capture.PNG)
 ![PR Reviewer](images/PR_review_process.png)
 
 Streamline Your GitHub Pull Requests with AI, co-authored with LLM(Large language model).
@@ -15,8 +15,6 @@ Streamline Your GitHub Pull Requests with AI, co-authored with LLM(Large languag
 - Leverages LLM for intelligent analysis and feedback
 - Can be easily customized to fit your project needs
 - Easy to set up and use
-- Cost Analysis of each review
-- type-checking for python: **pyre-check**
 
 Code review flow
 1. **Creating**: Authors start modifying, adding, or deleting some code; once ready, they create a change.
